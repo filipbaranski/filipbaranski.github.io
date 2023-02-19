@@ -46,6 +46,6 @@ a {
 }
 
 .innerBorder {
-  padding: 20px;
+  padding: 20px 10px;
 }
 </style>

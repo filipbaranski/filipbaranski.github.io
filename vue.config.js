@@ -1,4 +1,4 @@
 // eslint-disable-next-line
-module.exports = {
-  publicPath: '/tea-hub/'
-}
+// module.exports = {
+//   publicPath: '/tea-hub/'
+// }
