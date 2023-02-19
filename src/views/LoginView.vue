@@ -75,7 +75,7 @@ form {
 
 input {
   outline: none;
-  width: 100%;
+  width: calc(100% - 40px);
   max-width: 400px;
   margin-bottom: 20px;
   border-radius: 20px;
