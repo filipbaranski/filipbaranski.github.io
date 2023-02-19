@@ -4,7 +4,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
-import './registerServiceWorker';
+// import './registerServiceWorker';
 import './styles/index.scss';
 
 const app = createApp(App);
