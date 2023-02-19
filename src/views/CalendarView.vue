@@ -285,7 +285,7 @@ nav {
     width: 100%;
     height: 50px;
     font-weight: 600;
-    border: 2px solid transparent;
+    border: 2px solid $white;
 
     img {
       width: 20px;
