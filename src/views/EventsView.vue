@@ -1,0 +1,462 @@
+<script setup lang="ts">
+import { computed, reactive } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useDatesStore } from '@/stores/dates';
+import AddButton from '@/components/Events/AddButton.vue';
+import EventsModal from '@/components/Events/EventsModal.vue';
+
+const datesStore = useDatesStore();
+
+const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
+
+const state = reactive({
+  addModalOpen: false,
+  editModalOpen: false,
+  editedData: {},
+  birthdayOpen: false,
+  holidaysOpen: false,
+  eventsOpen: true,
+});
+
+const orderedDates = computed(() => {
+  if (dates.value.length !== 0) {
+    const data = dates.value;
+    const filtered = data.filter((date) => !date.year);
+    const result = filtered.sort(compare);
+    return result;
+  }
+  return [];
+});
+
+const orderedOneTimeDates = computed(() => {
+  if (dates.value.length !== 0) {
+    const data = dates.value;
+    const filtered = data.filter((date) => date.year);
+    const result = filtered.sort(compareWithYear);
+    return result;
+  }
+  return [];
+});
+
+const filteredBirthdayDates = computed(() => {
+  const data = orderedDates.value;
+  const filteredData = data.filter((item) => item.event.indexOf('Urodziny') !== -1 || item.event.indexOf('Imieniny') !== -1);
+  return filteredData;
+});
+
+const filteredHolidayDates = computed(() => {
+    const data = orderedDates.value;
+    const filteredData = data.filter((item) => item.event.indexOf('Urodziny') === -1 && item.event.indexOf('Imieniny') === -1);
+    return filteredData;
+});
+
+const compare = (a: any, b: any) => {
+  if (`${a.month}${a.day}` > `${b.month}${b.day}`) return 1;
+  if (`${b.month}${b.day}` > `${a.month}${a.day}`) return -1;
+
+  return 0;
+}
+
+const compareWithYear = (a: any, b: any) => {
+  if (`${a.year}${a.month}${a.day}` > `${b.year}${b.month}${b.day}`) return 1;
+  if (`${b.year}${b.month}${b.day}` > `${a.year}${a.month}${a.day}`) return -1;
+
+  return 0;
+}
+
+const openModal = () => {
+  if (datesDateUpdating.value.length === 0 && !datesLoading.value) {
+    state.addModalOpen = true;
+  }
+}
+
+const closeModal = () => {
+  state.addModalOpen = false;
+}
+
+const openEditModal = (data: any) => {
+  if (datesLoading.value === false && datesDateUpdating.value.indexOf(data._id) === -1) {
+    state.editedData = data;
+    state.editModalOpen = true;
+  }
+}
+
+const toggle = (e: any, data: any) => {
+  switch (data) {
+    case 'birthdayOpen': {
+      state.birthdayOpen = !state.birthdayOpen;
+      break;
+    }
+    case 'holidaysOpen': {
+      state.holidaysOpen = !state.holidaysOpen;
+      break;
+    }
+    case 'eventsOpen': {
+      state.eventsOpen = !state.eventsOpen;
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+const closeEditModal = () => {
+  state.editModalOpen = false;
+}
+
+const passed = (date: any) => {
+  const currentDate = new Date().toJSON().slice(0, 10);
+  const entryDate = (year: any, month: any, day: any) => new Date(year, month - 1, parseInt(day, 10) + 1)
+    .toJSON()
+    .slice(0, 10);
+  return entryDate(date.year, date.month, date.day) < currentDate;
+}
+</script>
+
+<template>
+  <section class="date">
+    <EventsModal
+      v-if="state.addModalOpen"
+      type="add"
+      @closeModal="closeModal"
+    />
+    <EventsModal
+      v-if="state.editModalOpen"
+      type="edit"
+      :data="state.editedData"
+      @closeModal="closeEditModal"
+    />
+    <section
+      :class="{
+        'date-header': true,
+        'open': state.birthdayOpen
+      }"
+      @click="e => toggle(e, 'birthdayOpen')"
+    >
+      Urodziny
+    </section>
+    <div
+      :class="{
+        'date-items_container': true,
+        'closed': !state.birthdayOpen
+      }"
+      :style="{'max-height': `${(filteredBirthdayDates.length * 44) + 12}px`}"
+    >
+      <div
+        v-for="date of filteredBirthdayDates"
+        :key="date.id"
+        :class="{
+          'date-container': true,
+          'loading': datesDateUpdating.indexOf(date._id) !== -1
+        }"
+        @click="openEditModal(date)"
+      >
+        <p class="date-format">
+          {{ date.day }}.{{ date.month }}
+        </p>
+        <p class="date-event">
+          {{ date.event }}
+        </p>
+        <div
+          v-if="(datesLoading === true && datesDateUpdating.length === 0)
+            || datesDateUpdating.indexOf(date._id) !== -1"
+          class="date-loader"
+        />
+        <div
+          v-if="datesLoading === true || datesDateUpdating.length !== 0"
+          class="date-mask"
+        />
+      </div>
+    </div>
+    <section
+      :class="{
+        'date-header': true,
+        'open': state.holidaysOpen
+      }"
+      @click=" e => toggle(e, 'holidaysOpen')"
+    >
+      Święta
+    </section>
+    <div
+      :class="{
+        'date-items_container': true,
+        'closed': !state.holidaysOpen
+      }"
+      :style="{'max-height': `${(filteredHolidayDates.length * 44) + 12}px`}"
+    >
+      <div
+        v-for="date of filteredHolidayDates"
+        :key="date.id"
+        :class="{
+          'date-container': true,
+          'loading': datesDateUpdating.indexOf(date._id) !== -1
+        }"
+        @click="openEditModal(date)"
+      >
+        <p class="date-format">
+          {{ date.day }}.{{ date.month }}
+        </p>
+        <p class="date-event">
+          {{ date.event }}
+        </p>
+        <div
+          v-if="(datesLoading === true && datesDateUpdating.length === 0)
+            || datesDateUpdating.indexOf(date._id) !== -1"
+          class="date-loader"
+        />
+        <div
+          v-if="datesLoading === true || datesDateUpdating.length !== 0"
+          class="date-mask"
+        />
+      </div>
+    </div>
+    <section
+      :class="{
+        'date-header': true,
+        'open': state.eventsOpen
+      }"
+      @click="e => toggle(e, 'eventsOpen')"
+    >
+      Wydarzenia
+    </section>
+    <div
+      :class="{
+        'date-items_container': true,
+        'closed': !state.eventsOpen
+      }"
+      :style="{'max-height': `${(orderedOneTimeDates.length * 44) + 12}px`}"
+    >
+      <div
+        v-for="date of orderedOneTimeDates"
+        :key="date.id"
+        :class="{'date-container': true,
+                'grey': passed(date) === true,
+                'loading': datesDateUpdating.indexOf(date._id) !== -1}"
+        @click="openEditModal(date)"
+      >
+        <p class="date-format">
+          {{ date.day }}.{{ date.month }}.{{ date.year }}
+        </p>
+        <p class="date-event">
+          {{ date.event }}
+        </p>
+        <div
+          v-if="(datesLoading === true && datesDateUpdating.length === 0)
+            || datesDateUpdating.indexOf(date._id) !== -1"
+          class="date-loader"
+        />
+        <div
+          v-if="datesLoading === true || datesDateUpdating.length !== 0"
+          class="date-mask"
+        />
+      </div>
+    </div>
+    <section @click="openModal">
+      <AddButton />
+    </section>
+  </section>
+</template>
+
+<style scoped lang="scss">
+@import '@/styles/global.scss';
+
+@keyframes rotateLoader {
+  0% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1024px;
+  margin: auto;
+
+  &-loader {
+    position: absolute;
+    bottom: -8px;
+    right: 5px;
+    height: 14px;
+    width: 14px;
+    border-radius: 20px;
+    border-top: 3px solid $border-green;
+    border-bottom: 3px solid $border-green;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    z-index: 10000;
+    animation: rotateLoader 1s linear infinite;
+  }
+
+  &-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    z-index: 1000;
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 4px);
+    height: 14px;
+    font-size: 18px;
+    padding: 10px 0;
+    cursor: pointer;
+    margin-top: 10px;
+    border: 2px solid $border-green;
+    transition: all 0.3s;
+
+    &.open {
+      background-color: $pale-green;
+      transition: all 0.3s;
+    }
+  }
+
+  &-items_container {
+    width: calc(100% - 4px);
+    border: 2px solid $border-green;
+    border-top: none;
+    opacity: 1;
+    transform-origin: top;
+    max-height: 0px;
+    overflow: hidden;
+    transition: all 0.3s;
+
+    &.closed {
+      opacity: 0;
+      max-height: 0px !important;
+      transition: all 0.3s;
+    }
+  }
+
+  &-container {
+    position: relative;
+    width: calc(100% - 34px);
+    display: flex;
+    align-items: center;
+    margin: 10px 15px;
+    border: 2px solid $border-green;
+    height: 25px;
+    font-size: 14px;
+    z-index: 1;
+    background-color: $white;
+
+    &.grey {
+      border: 2px solid $grey;
+
+      > .date-format {
+        background-color: $grey;
+      }
+
+      &:hover {
+        background: $pale-grey;
+      }
+    }
+
+    &:hover {
+      background: $pale-green;
+      cursor: pointer;
+    }
+
+    &.loading {
+      z-index: -1;
+    }
+
+    section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 18px;
+        height: 18px;
+        margin-left: 12px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    &-space {
+      width: 100%;
+      height: 20px;
+    }
+  }
+
+  &-format {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    height: 100%;
+    background-color: $border-green;
+    padding: 0 5px;
+    position: absolute;
+    width: 65px;
+  }
+
+  &-event {
+    flex: 5;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-start;
+    padding-left: 85px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .date {
+    &-header {
+      font-size: 20px;
+      height: 20px;
+      margin-top: 15px;
+
+      &:hover {
+        background-color: $pale-green;
+        transition: all 0.3s;
+      }
+    }
+
+    &-loader {
+      bottom: -6px;
+    }
+
+    &-container {
+      font-size: 18px;
+      height: 30px;
+      border: 1px solid $border-green;
+
+      &.grey {
+        border: 1px solid $grey;
+      }
+    }
+
+    &-separator {
+      font-size: 20px;
+    }
+
+    &-format {
+      width: 170px;
+    }
+
+    &-event {
+      justify-content: center;
+      padding-left: 0;
+    }
+  }
+}
+</style>
