@@ -342,7 +342,7 @@ const passed = (date: any) => {
 
   &-container {
     position: relative;
-    width: calc(100% - 34px);
+    width: auto;
     display: flex;
     align-items: center;
     margin: 10px;
