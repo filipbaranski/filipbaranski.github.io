@@ -1,10 +1,21 @@
 {
   "name": "Tea Hub",
   "short_name": "Tea Hub",
+  "description": "Tea Hub",
   "icons": [
     {
       "src": "./fav.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./fav.png",
       "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "./fav.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],
