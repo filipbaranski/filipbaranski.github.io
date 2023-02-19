@@ -345,7 +345,7 @@ const passed = (date: any) => {
     width: calc(100% - 34px);
     display: flex;
     align-items: center;
-    margin: 10px 15px;
+    margin: 10px;
     border: 2px solid $border-green;
     height: 25px;
     font-size: 14px;
