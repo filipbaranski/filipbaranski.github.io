@@ -6,6 +6,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [vue(), VitePWA({
+    workbox: {
+        globPatterns: ["**/*"],
+    },
+    includeAssets: [
+        "**/*",
+    ],
     registerType: 'autoUpdate',
     injectRegister: 'auto',
   })],
