@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { RouterLink } from 'vue-router';
 import MenuIcon from '@/assets/svg/MenuIcon.vue';
+import router from '@/router';
 
 const state = reactive({
   open: false,
@@ -15,6 +15,12 @@ const closeMenu = () => {
   state.open = false;
 }
 
+const goTo = (link: string) => {
+  setTimeout(() => {
+    router.push(link);
+  }, 150);
+}
+
 </script>
 
 <template>
@@ -22,9 +28,9 @@ const closeMenu = () => {
     <MenuIcon />
   </button>
   <nav class='menu-mobile' :class="{'open': state.open}" @click="closeMenu">
-    <RouterLink to="/">Dashboard</RouterLink>
-    <RouterLink to="/calendar">Kalendarz</RouterLink>
-    <RouterLink to="/events">Daty</RouterLink>
+    <a @click="goTo('/')">Dashboard</a>
+    <a @click="goTo('/calendar')">Kalendarz</a>
+    <a @click="goTo('/events')">Daty</a>
   </nav>
 </template>
 
@@ -55,7 +61,7 @@ const closeMenu = () => {
   width: 100vw;
   opacity: 0;
   z-index: 20000;
-  transition: right 0.25s, opacity 0.5s;
+  transition: right 0.15s, opacity 0.5s;
 
   &.open {
     right: 0;
