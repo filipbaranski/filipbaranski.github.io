@@ -22,6 +22,7 @@ const closeMenu = () => {
     <MenuIcon />
   </button>
   <nav class='menu-mobile' :class="{'open': state.open}" @click="closeMenu">
+    <RouterLink to="/">Dashboard</RouterLink>
     <RouterLink to="/calendar">Kalendarz</RouterLink>
     <RouterLink to="/events">Daty</RouterLink>
   </nav>
@@ -46,7 +47,7 @@ const closeMenu = () => {
 .menu-mobile {
   position: fixed;
   bottom: 0;
-  right: -150%;
+  right: -100%;
   display: flex;
   flex-direction: column;
   background-color: $white;
@@ -59,6 +60,7 @@ const closeMenu = () => {
   &.open {
     right: 0;
     opacity: 1;
+    transition: right 0.25s, opacity 0.5s;
   }
 }
 
