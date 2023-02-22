@@ -22,7 +22,6 @@ const closeMenu = () => {
     <MenuIcon />
   </button>
   <nav class='menu-mobile' :class="{'open': state.open}" @click="closeMenu">
-    <RouterLink to="/">Dashboard</RouterLink>
     <RouterLink to="/calendar">Kalendarz</RouterLink>
     <RouterLink to="/events">Daty</RouterLink>
   </nav>
