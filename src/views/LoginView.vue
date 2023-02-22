@@ -108,9 +108,14 @@ button {
   }
 }
 .error {
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
   color: $red;
   background-color: $pale-red;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 20px;
   padding: 5px 10px;
   border-radius: 20px;
 }
