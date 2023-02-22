@@ -51,7 +51,6 @@ const closeEditModal = () => {
   margin: 0 10px;
   height: calc(100vh - 155px);
   position: relative;
-  overflow: hidden;
 
   &-background {
     min-height: calc(100vh - 140px);

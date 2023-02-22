@@ -78,10 +78,8 @@ const update = () => {
       userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;
-    datesStore.updateDate({ id, payload })
-      .then(() => {
-        emit('closeModal');
-      });
+    datesStore.updateDate({ id, payload });
+    emit('closeModal');
   } else {
     state.error = true;
   }
@@ -90,10 +88,8 @@ const update = () => {
 const remove = () => {
   const { data } = props;
   const id = data._id;
-  datesStore.deleteDate(id)
-    .then(() => {
-      emit('closeModal');
-    });
+  datesStore.deleteDate(id);
+  emit('closeModal');
 }
 
 const send = () => {
@@ -108,10 +104,8 @@ const send = () => {
       userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;
-    datesStore.postDate(payload)
-      .then(() => {
-        emit('closeModal');
-      });
+    datesStore.postDate(payload);
+    emit('closeModal');
   } else {
     state.error = true;
   }
