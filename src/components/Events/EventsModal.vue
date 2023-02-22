@@ -12,56 +12,49 @@ const state = reactive({
   date: {
     day: props.data?.day || '',
     month: props.data?.month || '',
-    year: props.data?.year || new Date().getFullYear(),
+    year: props.data?.year || new Date().getFullYear().toString(),
     event: props.data?.event || '',
   },
   error: false,
   error_msg: '',
 });
 
+const listOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+const isValidDate = (year: any, month: any, day: any) => {
+  if (parseInt(month) > 12) return false;
+  if (parseInt(year) % 4 === 0 && parseInt(month) === 2 && parseInt(day) === 29) return true;
+  if (parseInt(day) > listOfDays[parseInt(month) - 1]) return false;
+  return true;
+}
+
 const validate = (data: any) => {
-  const {
+  let {
     day,
     month,
     year,
     event,
   } = data;
   if (day === '' || month === '' || event === '') {
-    state.error_msg = 'Wprowadź wszystkie wymagane dane.';
+    state.error_msg = 'Uzupełnij wszystkie wymagane pola';
     return false;
   }
-  if (day.length !== 2) {
-    state.error_msg = 'Niepoprawny numer dnia. Użyj formatu DD.';
+  if (day.length < 2) day = `0${day}`;
+  if (month.length < 2) month = `0${month}`;
+  if (day.length > 2 || month.length > 2 || (year !== '' && year.length !== 4)) {
+    state.error_msg = 'Niepoprawny format daty';
     return false;
   }
-  if (parseInt(day, 10) <= 0 || parseInt(day, 10) > 31) {
-    state.error_msg = 'Niepoprawny numer dnia.';
+  if (isValidDate(year, month, day) === false) {
+    state.error_msg = 'Niepoprawna data';
     return false;
   }
-  if (month.length !== 2) {
-    state.error_msg = 'Niepoprawny numer miesiąca. Użyj formatu MM.';
+  if (year[0] !== '2' || year[1] !== '0') {
+    state.error_msg = 'Niepoprawne stulecie';
     return false;
   }
-  if (parseInt(month, 10) <= 0 || parseInt(month, 10) > 12) {
-    state.error_msg = 'Niepoprawny numer miesiąca.';
-    return false;
-  }
-  if (year !== '' && year.length !== 4) {
-    state.error_msg = 'Niepoprawny rok. Użyj formatu RRRR.';
-    return false;
-  }
-  if (year.length === 4 && (year[0] !== '2' || year[1] !== '0')) {
-    state.error_msg = 'Niepoprawne stulecie.';
-    return false;
-  }
-  if (
-    day !== '' && day.length === 2 && parseInt(day, 10) > 0 && parseInt(day, 10) <= 31
-      && month !== '' && month.length === 2 && parseInt(month, 10) > 0 && parseInt(month, 10) <= 12
-      && ((year !== '' && year.length === 4) || year === '')
-      && event !== '') {
-        state.error_msg = '';
-    return true;
-  }
+  state.error_msg = '';
+  return true;
 }
 
 const update = () => {
@@ -71,8 +64,8 @@ const update = () => {
   if (isValid) {
     state.error = false;
     const payload = {
-      day: state.date.day,
-      month: state.date.month,
+      day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
+      month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
       event: state.date.event,
       userId: localStorage.getItem('userId'),
@@ -97,8 +90,8 @@ const send = () => {
   if (isValid) {
     state.error = false;
     const payload = {
-      day: state.date.day,
-      month: state.date.month,
+      day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
+      month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
       event: state.date.event,
       userId: localStorage.getItem('userId'),
@@ -112,8 +105,11 @@ const send = () => {
 }
 
 const detectKey = (e: any) => {
-  if (e.keyCode === 13) {
+  if (e.keyCode === 13 && props.type === 'add') {
     send();
+  }
+  if (e.keyCode === 13 && props.type === 'edit') {
+    update();
   }
 }
 </script>
@@ -191,14 +187,14 @@ const detectKey = (e: any) => {
   background-color: $pale-red;
   border-radius: 5px;
   margin: 0 auto 15px;
-  max-width: 305px;
   max-height: 0;
   opacity: 0;
-  transition: all 1s;
+  transition: all 0.25s;
 
   &.open {
     max-height: 200px;
     opacity: 1;
+    transition: all 0.25s;
   }
 }
 
@@ -253,7 +249,7 @@ const detectKey = (e: any) => {
 
     footer {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       margin-top: 5px;
 
       button {
