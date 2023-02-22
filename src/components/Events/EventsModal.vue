@@ -12,7 +12,7 @@ const state = reactive({
   date: {
     day: props.data?.day || '',
     month: props.data?.month || '',
-    year: props.data?.year || '',
+    year: props.data?.year || new Date().getFullYear(),
     event: props.data?.event || '',
   },
   error: false,
