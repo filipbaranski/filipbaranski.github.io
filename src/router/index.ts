@@ -46,7 +46,7 @@ router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
   const isAuthenticated = authStore.isAuthenticated;
   navigator.serviceWorker.ready.then((registration) => {
-    console.log("Test")
+    console.log("Test2")
     registration.update();
   });
   if (!isAuthenticated && to.name !== 'login') {
