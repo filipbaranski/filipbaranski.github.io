@@ -15,8 +15,9 @@ import fs from "fs";
     await execa("git", ["push", "origin", "HEAD:gh-pages", "--force"]);
     await execa("git", ["checkout", "-f", "master"]);
     await execa("git", ["branch", "-D", "gh-pages"]);
-    fs.rmSync('./dist', { recursive: true, force: true });
     console.log("Successfully deployed, check your settings");
+    fs.rmSync('./dist', { recursive: true, force: true });
+    console.log("Successfully removed temporary files");
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e.message);
