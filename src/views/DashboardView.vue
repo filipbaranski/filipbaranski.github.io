@@ -78,6 +78,9 @@ const closeEditModal = () => {
 @media only screen and (min-width: 768px) {
   .dashboard {
     height: calc(100vh - 170px);
+    &-background {
+      min-height: calc(100vh - 150px);
+    }
   }
 }
 </style>
