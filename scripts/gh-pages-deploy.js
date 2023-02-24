@@ -15,10 +15,9 @@ import fs from "fs";
     await execa("git", ["checkout", "-f", "master"]);
     console.log("Removing local gh-pages...");
     await execa("git", ["branch", "-D", "gh-pages"]);
-    console.log("Successfully deployed");
     console.log("Removing local /dist folder...");
     fs.rmSync('./dist', { recursive: true, force: true });
-    console.log("Successfully removed temporary files");
+    console.log("Successfully deployed");
   } catch (e) {
     console.log(e.message);
   }
