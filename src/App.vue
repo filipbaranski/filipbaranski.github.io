@@ -9,6 +9,20 @@ import { useDatesStore } from '@/stores/dates';
 
 const authStore = useAuthStore();
 
+(function calendarReload() {
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const ms = (((hours * 60) + minutes) * 60 + seconds) * 1000;
+  const msMod = ms + 2000;
+  setTimeout(() => {
+    const newDate = new Date();
+    useCalendarStore().getMonth({ year: newDate.getFullYear(), month: newDate.getMonth() + 1 });
+    calendarReload();
+  }, msMod);
+})();
+
 onMounted(() => {
   const token = localStorage.getItem('userToken');
   const id = localStorage.getItem('userId');
