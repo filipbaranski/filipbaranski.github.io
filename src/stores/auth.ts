@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { useCalendarStore } from '@/stores/calendar';
 import { useDatesStore } from '@/stores/dates';
-
-const api = 'https://rich-plum-barnacle-wrap.cyclic.app';
+import { api } from '@/utils/api';
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({

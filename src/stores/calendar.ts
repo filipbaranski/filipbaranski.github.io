@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-
-const api = 'https://rich-plum-barnacle-wrap.cyclic.app';
+import { api } from '@/utils/api';
 
 type BasicDateType = {
   month: Number,
