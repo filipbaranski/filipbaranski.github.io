@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar';
 import { useDatesStore } from '@/stores/dates';
-import { api } from '@/utils/api';
+import { client } from '@/utils/axios-instance';
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
@@ -21,17 +21,12 @@ export const useAuthStore = defineStore('authStore', {
   actions: {
     async login(username: String, password: String) {
       this.loading = true;
-      await fetch(`${api}/signin`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          localStorage.setItem('userToken', data.token);
-          localStorage.setItem('userId', data.id);
-          this.user.token = data.token;
-          this.user.id = data.id;
+      await client.post('/signin', JSON.stringify({ username, password }))
+        .then((response) => {
+          localStorage.setItem('userToken', response.data.token);
+          localStorage.setItem('userId', response.data.id);
+          this.user.token = response.data.token;
+          this.user.id = response.data.id;
           this.router.push('/');
         })
         .then(() => {

@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { api } from '@/utils/api';
+import { defineStore } from 'pinia';
+import { client } from '@/utils/axios-instance';
 
 type BasicDateType = {
   month: Number,
@@ -56,13 +56,11 @@ export const useCalendarStore = defineStore('calendarStore', {
       const storedCalendar = JSON.parse(cachedCalendar);
       if (cachedCalendar !== null) this.calendar = storedCalendar;
       const formattedRequest = `${body.year}/${body.month}/${localStorage.getItem('userId')}`;
-      await fetch(`${api}/calendar/${formattedRequest}`,
-        { headers: { 'bearer': localStorage.getItem('userToken') || "" } })
-        .then((response) => response.json())
-        .then((data) => {
-          if (isCalendarDataTheSame(data, storedCalendar) === false) {
-            localStorage.setItem('calendar', JSON.stringify(data));
-            this.calendar = data;
+      await client.get(`/calendar/${formattedRequest}`)
+        .then((response) => {
+          if (isCalendarDataTheSame(response.data, storedCalendar) === false) {
+            localStorage.setItem('calendar', JSON.stringify(response.data));
+            this.calendar = response.data;
           }
           this.calendarLoading = false;
           this.calendarDaysUpdating = [];
@@ -107,11 +105,7 @@ export const useCalendarStore = defineStore('calendarStore', {
       } else if (payload.no_cube.indexOf(data.day) !== -1 && data.no_cube === false) {
         payload.no_cube = payload.no_cube.filter((dates) => dates !== data.day);
       }
-      await fetch(`${api}/calendar/${body.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'bearer': localStorage.getItem('userToken') || ""},
-        body: JSON.stringify(payload),
-      })
+      await client.patch(`/calendar/${body.id}`, JSON.stringify(payload))
         .then(() => {
           this.getMonth({ year: body.payload.year, month: body.payload.month + 1 });
         })

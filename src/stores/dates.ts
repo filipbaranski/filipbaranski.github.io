@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import { api } from '@/utils/api';
+import { defineStore } from 'pinia';
+import { client } from '@/utils/axios-instance';
 
 const isDataTheSame = (data: any, cache: any) => {
   let returnValue = true;
@@ -36,13 +36,11 @@ export const useDatesStore = defineStore('datesStore', {
       if (cachedDates !== null) {
         this.dates = storedDates;
       }
-      await fetch(`${api}/dates/${localStorage.getItem('userId')}`,
-        { headers: { 'bearer': localStorage.getItem('userToken') || "" } })
-        .then((response) => response.json())
-        .then((data) => {
-          if (isDataTheSame(data, storedDates) === false) {
-            localStorage.setItem('dates', JSON.stringify(data));
-            this.dates = data;
+      await client.get(`/dates/${localStorage.getItem('userId')}`)
+        .then((response) => {
+          if (isDataTheSame(response.data, storedDates) === false) {
+            localStorage.setItem('dates', JSON.stringify(response.data));
+            this.dates = response.data;
           }
           this.datesLoading = false;
           this.datesDateUpdating = [];
@@ -54,11 +52,7 @@ export const useDatesStore = defineStore('datesStore', {
     },
     async postDate(payload: any) {
       this.datesLoading = true;
-      await fetch(`${api}/date`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'bearer': localStorage.getItem('userToken') || ""},
-        body: JSON.stringify(payload),
-      })
+      await client.post('/date', JSON.stringify(payload))
         .then(() => this.getDates())
         .catch(() => {
           this.datesLoading = false;
@@ -71,11 +65,7 @@ export const useDatesStore = defineStore('datesStore', {
       } else {
         this.datesDateUpdating.push(body.id);
       }
-      await fetch(`${api}/date/${body.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'bearer': localStorage.getItem('userToken') || ""},
-        body: JSON.stringify(body.payload),
-      })
+      await client.patch(`/date/${body.id}`, JSON.stringify(body.payload))
         .then(() => this.getDates())
         .catch(() => {
           this.datesDateUpdating = [];
@@ -88,10 +78,7 @@ export const useDatesStore = defineStore('datesStore', {
       } else {
         this.datesDateUpdating.push(id);
       }
-      await fetch(`${api}/date/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', 'bearer': localStorage.getItem('userToken') || ""},
-      })
+      await client.delete(`/date/${id}`)
         .then(() => this.getDates())
         .catch(() => {
           this.datesDateUpdating = [];
