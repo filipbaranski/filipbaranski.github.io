@@ -21,7 +21,7 @@ const state = reactive({
 
 const listOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-const isValidDate = (year: any, month: any, day: any) => {
+const isRealDate = (year: any, month: any, day: any) => {
   if (parseInt(month) > 12) return false;
   if (parseInt(year) % 4 === 0 && parseInt(month) === 2 && parseInt(day) === 29) return true;
   if (parseInt(day) > listOfDays[parseInt(month) - 1]) return false;
@@ -45,7 +45,7 @@ const validate = (data: any) => {
     state.error_msg = 'Niepoprawny format daty';
     return false;
   }
-  if (isValidDate(year, month, day) === false) {
+  if (isRealDate(year, month, day) === false) {
     state.error_msg = 'Niepoprawna data';
     return false;
   }
@@ -78,13 +78,6 @@ const update = () => {
   }
 }
 
-const remove = () => {
-  const { data } = props;
-  const id = data._id;
-  datesStore.deleteDate(id);
-  emit('closeModal');
-}
-
 const send = () => {
   const isValid = validate(state.date);
   if (isValid) {
@@ -102,6 +95,13 @@ const send = () => {
   } else {
     state.error = true;
   }
+}
+
+const remove = () => {
+  const { data } = props;
+  const id = data._id;
+  datesStore.deleteDate(id);
+  emit('closeModal');
 }
 
 const detectKey = (e: any) => {
