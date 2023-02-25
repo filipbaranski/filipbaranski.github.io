@@ -49,7 +49,7 @@ const validate = (data: any) => {
     state.error_msg = 'Niepoprawna data';
     return false;
   }
-  if (year[0] !== '2' || year[1] !== '0') {
+  if (year !== '' && (year[0] !== '2' || year[1] !== '0')) {
     state.error_msg = 'Niepoprawne stulecie';
     return false;
   }
