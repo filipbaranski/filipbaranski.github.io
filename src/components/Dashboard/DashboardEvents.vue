@@ -49,9 +49,9 @@ const eventFilter = (daysLeft: any) => {
 </script>
 
 <template>
-  <main>
+  <section v-if="upcomingEvents.length !== 0">
     <RouterLink class="dates-link" to="/events">
-      <div v-if="upcomingEvents.length !== 0" class="dates">
+      <div class="dates">
         <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
         <section v-for="n in daysInAdvance + 1" :key="n">
           <div v-if="eventFilter(n - 1).length !== 0" class="dates-block">
@@ -74,22 +74,11 @@ const eventFilter = (daysLeft: any) => {
         </section>
       </div>
     </RouterLink>
-  </main>
+  </section>
 </template>
 
 <style scoped lang="scss">
 @import '@/styles/global.scss';
-
-@keyframes moduleUpFadeIn {
-  0% {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 @keyframes rotateLoader {
   0% {
@@ -106,7 +95,6 @@ const eventFilter = (daysLeft: any) => {
   padding: 15px 20px 0;
   border: 2px solid $border-green;
   font-size: 14px;
-  animation: moduleUpFadeIn 1s;
   min-width: 230px;
   max-width: 75vw;
 

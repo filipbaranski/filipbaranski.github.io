@@ -47,6 +47,17 @@ const closeEditModal = () => {
 <style scoped lang="scss">
 @import '@/styles/global.scss';
 
+@keyframes moduleUpFadeIn {
+  0% {
+    transform: translateY(100px) translateX(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) translateX(-50%);
+    opacity: 1;
+  }
+}
+
 .dashboard {
   margin: 0 10px;
   height: calc(100vh - 155px);
@@ -72,6 +83,11 @@ const closeEditModal = () => {
   &-bottom_container {
     position: absolute;
     bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: moduleUpFadeIn 1s;
+    animation-delay: -0.1s;
   }
 }
 

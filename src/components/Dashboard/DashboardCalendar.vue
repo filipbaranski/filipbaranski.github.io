@@ -62,17 +62,6 @@ const editedData = computed(() => {
 <style scoped lang="scss">
 @import '@/styles/global.scss';
 
-@keyframes moduleUpFadeIn {
-  0% {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 @keyframes rotateLoader {
   0% {
     transform: translateY(-50%) rotate(0deg);
@@ -87,15 +76,12 @@ const editedData = computed(() => {
   border: 2px solid $border-green;
   font-size: 14px;
   min-width: 230px;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-around;
 
   &-container {
     position: relative;
-    animation: moduleUpFadeIn 1s;
-    animation-delay: -0.1s;
   }
 
   &:hover {
