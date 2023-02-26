@@ -49,7 +49,7 @@ const eventFilter = (daysLeft: any) => {
 </script>
 
 <template>
-  <section v-if="upcomingEvents.length !== 0">
+  <section class="dates-container" v-if="upcomingEvents.length !== 0">
     <RouterLink class="dates-link" to="/events">
       <div class="dates">
         <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
@@ -95,9 +95,12 @@ const eventFilter = (daysLeft: any) => {
   padding: 15px 5px 0;
   border: 2px solid $border-green;
   font-size: 14px;
-  min-width: 230px;
-  max-width: 75vw;
-  margin: 0 auto;
+
+  &-container {
+    position: relative;
+    width: 75vw;
+    margin: 0 auto;
+  }
 
   &-link {
     text-decoration: none;
@@ -143,8 +146,10 @@ const eventFilter = (daysLeft: any) => {
 @media only screen and (min-width: 768px) {
   .dates {
     font-size: 18px;
-    min-width: 360px;
-    max-width: 500px;
+
+    &-container {
+      width: 500px;
+    }
   }
 }
 </style>

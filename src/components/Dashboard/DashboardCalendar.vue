@@ -75,15 +75,14 @@ const editedData = computed(() => {
   padding: 5px;
   border: 2px solid $border-green;
   font-size: 14px;
-  min-width: 230px;
-  max-width: 75vw;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-around;
 
   &-container {
     position: relative;
+    width: 75vw;
+    margin: 0 auto;
   }
 
   &:hover {
@@ -140,8 +139,10 @@ const editedData = computed(() => {
 @media only screen and (min-width: 768px) {
   .calendar_day {
     font-size: 18px;
-    min-width: 360px;
-    max-width: 500px;
+
+    &-container {
+      width: 500px;
+    }
   }
 }
 </style>
