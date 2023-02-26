@@ -49,11 +49,11 @@ const closeEditModal = () => {
 
 @keyframes moduleUpFadeIn {
   0% {
-    transform: translateY(100px) translateX(-50%);
+    transform: translateY(100px);
     opacity: 0;
   }
   100% {
-    transform: translateY(0) translateX(-50%);
+    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -74,14 +74,13 @@ const closeEditModal = () => {
 
   &-layout {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     text-align: center;
     z-index: 100;
   }
 
   &-bottom_container {
     position: absolute;
+    width: 100%;
     bottom: 20px;
     display: flex;
     flex-direction: column;

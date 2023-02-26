@@ -92,11 +92,12 @@ const eventFilter = (daysLeft: any) => {
 .dates {
   max-height: 50vh;
   overflow-y: scroll;
-  padding: 15px 20px 0;
+  padding: 15px 5px 0;
   border: 2px solid $border-green;
   font-size: 14px;
   min-width: 230px;
   max-width: 75vw;
+  margin: 0 auto;
 
   &-link {
     text-decoration: none;
@@ -143,6 +144,7 @@ const eventFilter = (daysLeft: any) => {
   .dates {
     font-size: 18px;
     min-width: 360px;
+    max-width: 500px;
   }
 }
 </style>
