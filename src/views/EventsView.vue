@@ -13,8 +13,7 @@ const state = reactive({
   addModalOpen: false,
   editModalOpen: false,
   editedData: {},
-  birthdayOpen: false,
-  holidaysOpen: false,
+  yearlyOpen: false,
   eventsOpen: true,
 });
 
@@ -36,18 +35,6 @@ const orderedOneTimeDates = computed(() => {
     return result;
   }
   return [];
-});
-
-const filteredBirthdayDates = computed(() => {
-  const data = orderedDates.value;
-  const filteredData = data.filter((item) => item.event.indexOf('Urodziny') !== -1 || item.event.indexOf('Imieniny') !== -1);
-  return filteredData;
-});
-
-const filteredHolidayDates = computed(() => {
-    const data = orderedDates.value;
-    const filteredData = data.filter((item) => item.event.indexOf('Urodziny') === -1 && item.event.indexOf('Imieniny') === -1);
-    return filteredData;
 });
 
 const compare = (a: any, b: any) => {
@@ -81,14 +68,14 @@ const openEditModal = (data: any) => {
   }
 }
 
+const closeEditModal = () => {
+  state.editModalOpen = false;
+}
+
 const toggle = (e: any, data: any) => {
   switch (data) {
-    case 'birthdayOpen': {
-      state.birthdayOpen = !state.birthdayOpen;
-      break;
-    }
-    case 'holidaysOpen': {
-      state.holidaysOpen = !state.holidaysOpen;
+    case 'yearlyOpen': {
+      state.yearlyOpen = !state.yearlyOpen;
       break;
     }
     case 'eventsOpen': {
@@ -98,10 +85,6 @@ const toggle = (e: any, data: any) => {
     default:
       break;
   }
-}
-
-const closeEditModal = () => {
-  state.editModalOpen = false;
 }
 
 const passed = (date: any) => {
@@ -129,63 +112,21 @@ const passed = (date: any) => {
     <section
       :class="{
         'date-header': true,
-        'open': state.birthdayOpen
+        'open': state.yearlyOpen
       }"
-      @click="e => toggle(e, 'birthdayOpen')"
+      @click="e => toggle(e, 'yearlyOpen')"
     >
-      Urodziny
+      Coroczne
     </section>
     <div
       :class="{
         'date-items_container': true,
-        'closed': !state.birthdayOpen
+        'closed': !state.yearlyOpen
       }"
-      :style="{'max-height': `${(filteredBirthdayDates.length * 44) + 12}px`}"
+      :style="{'max-height': `${(orderedDates.length * 44) + 12}px`}"
     >
       <div
-        v-for="date of filteredBirthdayDates"
-        :key="date.id"
-        :class="{
-          'date-container': true,
-          'loading': datesDateUpdating.indexOf(date._id) !== -1
-        }"
-        @click="openEditModal(date)"
-      >
-        <p class="date-format">
-          {{ date.day }}.{{ date.month }}
-        </p>
-        <p class="date-event">
-          {{ date.event }}
-        </p>
-        <div
-          v-if="(datesLoading === true && datesDateUpdating.length === 0)
-            || datesDateUpdating.indexOf(date._id) !== -1"
-          class="date-loader"
-        />
-        <div
-          v-if="datesLoading === true || datesDateUpdating.length !== 0"
-          class="date-mask"
-        />
-      </div>
-    </div>
-    <section
-      :class="{
-        'date-header': true,
-        'open': state.holidaysOpen
-      }"
-      @click=" e => toggle(e, 'holidaysOpen')"
-    >
-      Święta
-    </section>
-    <div
-      :class="{
-        'date-items_container': true,
-        'closed': !state.holidaysOpen
-      }"
-      :style="{'max-height': `${(filteredHolidayDates.length * 44) + 12}px`}"
-    >
-      <div
-        v-for="date of filteredHolidayDates"
+        v-for="date of orderedDates"
         :key="date.id"
         :class="{
           'date-container': true,
@@ -217,7 +158,7 @@ const passed = (date: any) => {
       }"
       @click="e => toggle(e, 'eventsOpen')"
     >
-      Wydarzenia
+      Nadchodzące wydarzenia
     </section>
     <div
       :class="{
