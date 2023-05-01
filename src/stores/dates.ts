@@ -15,9 +15,9 @@ const isDataTheSame = (data: any, cache: any) => {
     } = entry;
     const cachedItem = cachedData.filter((item) => item._id === _id);
     if (cachedItem[0].day !== day
-            || cachedItem[0].month !== month
-            || cachedItem[0].year !== year
-            || cachedItem[0].event !== event) returnValue = false;
+      || cachedItem[0].month !== month
+      || cachedItem[0].year !== year
+      || cachedItem[0].event !== event) returnValue = false;
   });
   return returnValue;
 };

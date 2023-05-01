@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('authStore', {
       id: '',
       token: '',
     },
+    lastDay: '',
     error: false,
     loading: false,
   }),
