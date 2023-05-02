@@ -81,6 +81,7 @@ input {
   border-radius: 20px;
   border: 2px solid $border-green;
   padding: 10px 20px;
+  letter-spacing: 0.6px;
 }
 
 button {
@@ -92,6 +93,7 @@ button {
   background-color: $border-green;
   padding: 10px;
   color: $white;
+  font-weight: 600;
   cursor: pointer;
 
   &:hover {
@@ -111,12 +113,10 @@ button {
   display: flex;
   justify-content: center;
   font-size: 14px;
+  font-weight: 600;
   color: $red;
-  background-color: $pale-red;
   width: 100%;
   max-width: 380px;
-  margin-top: 20px;
-  padding: 5px 10px;
-  border-radius: 20px;
+  margin-top: 15px;
 }
 </style>
