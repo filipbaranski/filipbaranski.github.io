@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar';
+import { useAuthStore } from '@/stores/auth';
 import Cube from '@/assets/svg/Cube.svg';
 import CubeWhite from '@/assets/svg/CubeWhite.svg';
 
@@ -36,6 +37,17 @@ const update = () => {
   calendarStore.updateCalendar({ id, payload });
   emit('closeModal');
 };
+
+onBeforeMount(() => {
+  const authStore = useAuthStore();
+  const currentDate = new Date();
+  const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+  if (authStore.lastDay !== '' && authStore.lastDay !== testString) {
+    authStore.lastDay = testString;
+    useCalendarStore().getMonth({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 });
+    emit('closeModal');
+  }
+});
 </script>
 
 <template>
