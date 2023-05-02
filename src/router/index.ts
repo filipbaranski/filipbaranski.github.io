@@ -61,7 +61,6 @@ router.beforeEach(async (to, from) => {
     authStore.lastDay = testString;
     useCalendarStore().getMonth({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 });
   }
-
 })
 
 export default router

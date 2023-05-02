@@ -44,8 +44,7 @@ onBeforeMount(() => {
   const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
   if (authStore.lastDay !== '' && authStore.lastDay !== testString) {
     authStore.lastDay = testString;
-    useCalendarStore().getMonth({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 });
-    emit('closeModal');
+    window.location.reload();
   }
 });
 </script>
