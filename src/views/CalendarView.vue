@@ -205,7 +205,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
+  margin: 10px auto 0;
   max-width: 600px;
   padding: 0 8px;
 
@@ -343,7 +343,7 @@ nav {
 
 @media only screen and (min-width: 1024px) {
   nav {
-    margin-top: 35px;
+    margin-top: 15px;
 
     h2 {
       font-size: 20px;
