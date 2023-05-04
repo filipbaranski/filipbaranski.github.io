@@ -52,9 +52,9 @@ const editedData = computed(() => {
     <div class="calendar_day">
       <div :class="{'calendar_day-circle': true, 'red': calendar.red.indexOf(state.currentDay) !== -1}"/>
       <img :src="calendar.no_cube.indexOf(state.currentDay) === -1 ? CubeWhite : Cube">
-      <p>
+      <!-- <p>
         {{ calendar.number[state.currentDay - 1] || 0 }}
-      </p>
+      </p> -->
     </div>
   </section>
 </template>

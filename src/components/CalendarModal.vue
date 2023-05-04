@@ -81,12 +81,12 @@ onBeforeMount(() => {
           </label>
         </div>
       </div>
-      <input
+      <!-- <input
         v-model="state.number"
         type="text"
         placeholder="Powtórzenia"
         spellcheck="false"
-      >
+      > -->
       <footer>
         <button
           :disabled="calendarDaysUpdating.length !== 0"
