@@ -68,6 +68,7 @@ export const useCalendarStore = defineStore('calendarStore', {
         })
         .catch(() => {
           if (body.month !== Number(storedCalendar.month)) {
+            // For entering new month offline
             this.calendar = emptyCalendar({ month: body.month, year: body.year, user: localStorage.getItem('userId') });
           }
           this.calendarLoading = false;
