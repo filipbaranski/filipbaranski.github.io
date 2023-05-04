@@ -64,36 +64,39 @@ const closeEditModal = () => {
 }
 
 const loadMonth = async (direction: any) => {
-  if (direction === 'previous' && state.month === 0) {
-    const response = await calendarStore.getMonth({ year: state.year - 1, month: 12 });
-    if (response === true) {
-      state.month = 11;
-      state.year -= 1;
+  const isOnline = window.navigator.onLine;
+  if (isOnline) {
+    if (direction === 'previous' && state.month === 0) {
+      const response = await calendarStore.getMonth({ year: state.year - 1, month: 12 });
+      if (response === true) {
+        state.month = 11;
+        state.year -= 1;
+        return;
+      }
       return;
     }
-    return;
-  }
-  if (direction === 'previous' && state.month !== 0) {
-    const response = await calendarStore.getMonth({ year: state.year, month: state.month });
-    if (response === true) {
-      state.month -= 1;
+    if (direction === 'previous' && state.month !== 0) {
+      const response = await calendarStore.getMonth({ year: state.year, month: state.month });
+      if (response === true) {
+        state.month -= 1;
+        return;
+      }
       return;
     }
-    return;
-  }
-  if (direction === 'next' && state.month === 11) {
-    const response = await calendarStore.getMonth({ year: state.year + 1, month: 1 });
-    if (response === true) {
-      state.month = 0;
-      state.year += 1;
+    if (direction === 'next' && state.month === 11) {
+      const response = await calendarStore.getMonth({ year: state.year + 1, month: 1 });
+      if (response === true) {
+        state.month = 0;
+        state.year += 1;
+        return;
+      }
       return;
     }
-    return;
-  }
-  if (direction === 'next' && state.month !== 11) {
-    const response = await calendarStore.getMonth({ year: state.year, month: state.month + 2 });
-    if (response === true) {
-      state.month += 1;
+    if (direction === 'next' && state.month !== 11) {
+      const response = await calendarStore.getMonth({ year: state.year, month: state.month + 2 });
+      if (response === true) {
+        state.month += 1;
+      }
     }
   }
 }
