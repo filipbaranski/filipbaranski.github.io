@@ -182,12 +182,12 @@ const passed = (date: any) => {
           {{ date.event }}
         </p>
         <div
-          v-if="(datesLoading === true && datesDateUpdating.length === 0)
+          v-if="(!datesLoading === true && datesDateUpdating.length === 0)
             || datesDateUpdating.indexOf(date._id) !== -1"
           class="date-loader"
         />
         <div
-          v-if="datesLoading === true || datesDateUpdating.length !== 0"
+          v-if="!datesLoading === true || datesDateUpdating.length !== 0"
           class="date-mask"
         />
       </div>
@@ -222,7 +222,7 @@ const passed = (date: any) => {
 
   &-loader {
     position: absolute;
-    bottom: -8px;
+    top: 50%;
     right: 5px;
     height: 14px;
     width: 14px;
