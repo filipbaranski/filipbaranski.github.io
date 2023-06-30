@@ -114,9 +114,9 @@ const passed = (date: any) => {
         'date-header': true,
         'open': state.yearlyOpen
       }"
-      @click="e => toggle(e, 'yearlyOpen')"
+      @click="(e: Event) => toggle(e, 'yearlyOpen')"
     >
-      Coroczne
+      <p>Coroczne</p>
     </section>
     <div
       :class="{
@@ -156,9 +156,9 @@ const passed = (date: any) => {
         'date-header': true,
         'open': state.eventsOpen
       }"
-      @click="e => toggle(e, 'eventsOpen')"
+      @click="(e: Event) => toggle(e, 'eventsOpen')"
     >
-      Nadchodzące wydarzenia
+      <p>Nadchodzące wydarzenia</p>
     </section>
     <div
       :class="{
