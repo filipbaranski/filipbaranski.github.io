@@ -51,6 +51,13 @@ a {
 }
 
 .innerBorder {
-  padding: 20px 10px;
+  padding: 10px;
 }
+
+@media only screen and (min-width: 768px) {
+  .innerBorder {
+    padding: 20px 10px;
+  }
+}
+
 </style>
