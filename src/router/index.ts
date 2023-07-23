@@ -43,12 +43,25 @@ const router = createRouter({
   ]
 })
 
+const checkLsAuth = (authStore: any) => {
+  const token = localStorage.getItem('userToken');
+  const id = localStorage.getItem('userId');
+
+  if (token === null || token === "" || id === null || id === "") {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userId');
+    authStore.user.token = '';
+    authStore.user.id = '';
+  }
+}
+
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
+  checkLsAuth(authStore);
   const isAuthenticated = authStore.isAuthenticated;
   const currentDate = new Date();
-  const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
-  if (!isAuthenticated && to.name !== 'login') {
+  const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+  if (!isAuthenticated &&  to.name !== 'login') {
     return { name: 'login' }
   }
   if (isAuthenticated && to.name === 'login' && typeof from.path !== "undefined") {

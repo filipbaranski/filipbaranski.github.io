@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('authStore', {
   }),
   getters: {
     isAuthenticated(state) {
-      const result = state.user.token === '' ? false : true;
+      const result = (state.user.token === '' || state.user.id === '') ? false : true;
       return result;
     },
   },
