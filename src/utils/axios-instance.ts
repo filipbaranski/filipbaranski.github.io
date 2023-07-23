@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = 'https://rich-plum-barnacle-wrap.cyclic.app';
+const api = import.meta.env.VITE_SERVER_URL;
 
 export const client = axios.create({
 	baseURL: api,
