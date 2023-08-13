@@ -88,11 +88,14 @@ const toggle = (e: any, data: any) => {
 }
 
 const passed = (date: any) => {
-  const currentDate = new Date().toJSON().slice(0, 10);
-  const entryDate = (year: any, month: any, day: any) => new Date(year, month - 1, parseInt(day, 10) + 1)
-    .toJSON()
-    .slice(0, 10);
-  return entryDate(date.year, date.month, date.day) < currentDate;
+  // const currentDate = new Date().toJSON().slice(0, 10);
+  const currentDate = new Date();
+  // const entryDate = (year: any, month: any, day: any) => new Date(year, month - 1, parseInt(day, 10) + 1)
+  //   .toJSON()
+  //   .slice(0, 10);
+  const entryDate = new Date(date.year, date.month - 1, date.day)
+  // return entryDate(date.year, date.month, date.day) < currentDate;
+  return entryDate < currentDate;
 }
 </script>
 
