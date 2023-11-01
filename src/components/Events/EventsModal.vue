@@ -67,7 +67,7 @@ const update = () => {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
-      event: state.date.event,
+      event: state.date.event.trim(),
       userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;
@@ -86,7 +86,7 @@ const send = () => {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
-      event: state.date.event,
+      event: state.date.event.trim(),
       userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;

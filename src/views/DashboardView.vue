@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar';
 import CalendarModal from '@/components/CalendarModal.vue';
@@ -25,6 +25,16 @@ const closeEditModal = () => {
   state.editModalOpen = false;
   state.editedData = {};
 }
+
+onMounted(() => {
+  const currentCalendar = calendarStore.calendar;
+  const date = new Date();
+  const month = Number(date.getMonth()) + 1;
+  const year = Number(date.getFullYear());
+  if (Number(currentCalendar.month) !== month || Number(currentCalendar.year) !== year) {
+    useCalendarStore().getMonth({ year, month: month });
+  }
+});
 </script>
 
 <template>
