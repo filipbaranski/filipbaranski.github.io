@@ -30,12 +30,14 @@ const closeEditModal = () => {
 }
 
 onMounted(() => {
-  const currentCalendar = calendarStore.calendar;
-  const date = new Date();
-  const month = Number(date.getMonth()) + 1;
-  const year = Number(date.getFullYear());
-  if (Number(currentCalendar.month) !== month || Number(currentCalendar.year) !== year) {
-    useCalendarStore().getMonth({ year, month: month });
+  if (user.value.role === 'admin') {
+    const currentCalendar = calendarStore.calendar;
+    const date = new Date();
+    const month = Number(date.getMonth()) + 1;
+    const year = Number(date.getFullYear());
+    if (Number(currentCalendar.month) !== month || Number(currentCalendar.year) !== year) {
+      useCalendarStore().getMonth({ year, month: month });
+    }
   }
 });
 </script>

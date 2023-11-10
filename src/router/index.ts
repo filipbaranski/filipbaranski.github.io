@@ -76,7 +76,7 @@ router.beforeEach(async (to, from) => {
   if (authStore.lastDay === '') {
     authStore.lastDay = testString;
   }
-  if (authStore.lastDay !== '' && authStore.lastDay !== testString) {
+  if (authStore.lastDay !== '' && authStore.lastDay !== testString && authStore.user.role === 'admin') {
     authStore.lastDay = testString;
     useCalendarStore().getMonth({ year: currentDate.getFullYear(), month: currentDate.getMonth() + 1 });
   }

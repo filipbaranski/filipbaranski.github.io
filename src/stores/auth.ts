@@ -25,7 +25,6 @@ export const useAuthStore = defineStore('authStore', {
       this.loading = true;
       await client.post('/signin', JSON.stringify({ username, password }))
         .then((response) => {
-          console.log(response)
           localStorage.setItem('userToken', response.data.token);
           localStorage.setItem('userId', response.data.id);
           localStorage.setItem('userRole', response.data.role);
@@ -35,9 +34,11 @@ export const useAuthStore = defineStore('authStore', {
           this.router.push('/');
         })
         .then(() => {
-          const date = new Date();
-          useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
-          useDatesStore().getDates();
+          if (this.user.role === 'admin') {
+            const date = new Date();
+            useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
+            useDatesStore().getDates();
+          }
         })
         .catch((error) => {
           this.error = true;

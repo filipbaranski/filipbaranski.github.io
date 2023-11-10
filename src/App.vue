@@ -18,7 +18,7 @@ onMounted(() => {
     authStore.user.id = id;
     authStore.user.role = role;
     const date = new Date();
-    useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
+    if (role === 'admin') useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
     useDatesStore().getDates();
   } else {
     localStorage.removeItem('userToken');
