@@ -2,12 +2,15 @@
 import { reactive, onMounted } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar';
+import { useAuthStore } from '@/stores/auth';
 import CalendarModal from '@/components/CalendarModal.vue';
 import DashboardCalendar from '@/components/Dashboard/DashboardCalendar.vue';
 import DashboardEvents from '@/components/Dashboard/DashboardEvents.vue';
 
 const calendarStore = useCalendarStore();
+const authStore = useAuthStore();
 const { calendarLoading } = storeToRefs(calendarStore);
+const { user } = storeToRefs(authStore);
 
 const state = reactive({
   editModalOpen: false,
@@ -46,6 +49,7 @@ onMounted(() => {
     />
     <section class="dashboard-layout dashboard-bottom_container">
       <DashboardCalendar
+        v-if="user.role === 'admin'"
         @openModal="openEditModal"
       />
       <DashboardEvents />

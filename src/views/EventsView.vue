@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, onUpdated, onMounted } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useDatesStore } from '@/stores/dates';
 import AddButton from '@/components/Events/AddButton.vue';
@@ -14,7 +14,9 @@ const state = reactive({
   editModalOpen: false,
   editedData: {},
   yearlyOpen: false,
+  yearlyOpenHeight: 0,
   eventsOpen: true,
+  eventsOpenHeight: 0,
 });
 
 const orderedDates = computed(() => {
@@ -92,6 +94,19 @@ const passed = (date: any) => {
   const entryDate = new Date(date.year, date.month - 1, date.day, 23, 59, 59);
   return entryDate < currentDate;
 }
+
+const getHeights = () => {
+  const eventsContent = document.getElementById('eventsModal').children[0];
+  const eventsHeighteight = eventsContent.clientHeight;
+  state.eventsOpenHeight = eventsHeighteight;
+  const yearlyContent = document.getElementById('yearlyModal').children[0];
+  const yearlyHeighteight = yearlyContent.clientHeight;
+  state.yearlyOpenHeight = yearlyHeighteight;
+}
+
+onMounted(() => getHeights());
+onUpdated(() => getHeights());
+
 </script>
 
 <template>
@@ -117,37 +132,46 @@ const passed = (date: any) => {
       <p>Coroczne</p>
     </section>
     <div
+      id="yearlyModal"
       :class="{
         'date-items_container': true,
         'closed': !state.yearlyOpen
       }"
-      :style="{'max-height': `${(orderedDates.length * 44) + 12}px`}"
+      :style="{'max-height': `${state.yearlyOpenHeight + 20}px`}"
     >
-      <div
-        v-for="date of orderedDates"
-        :key="date.id"
-        :class="{
-          'date-container': true,
-          'loading': datesDateUpdating.indexOf(date._id) !== -1
-        }"
-        @click="openEditModal(date)"
+      <p
+        class="date-placeholder"
+        v-if="orderedDates.length === 0"
       >
-        <p class="date-format">
-          {{ date.day }}.{{ date.month }}
-        </p>
-        <p class="date-event">
-          {{ date.event }}
-        </p>
+        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole ekranu.
+      </p>
+      <section v-if="orderedDates.length !== 0">
         <div
-          v-if="(datesLoading === true && datesDateUpdating.length === 0)
-            || datesDateUpdating.indexOf(date._id) !== -1"
-          class="date-loader"
-        />
-        <div
-          v-if="datesLoading === true || datesDateUpdating.length !== 0"
-          class="date-mask"
-        />
-      </div>
+          v-for="date of orderedDates"
+          :key="date.id"
+          :class="{
+            'date-container': true,
+            'loading': datesDateUpdating.indexOf(date._id) !== -1
+          }"
+          @click="openEditModal(date)"
+        >
+          <p class="date-format">
+            {{ date.day }}.{{ date.month }}
+          </p>
+          <p class="date-event">
+            {{ date.event }}
+          </p>
+          <div
+            v-if="(datesLoading === true && datesDateUpdating.length === 0)
+              || datesDateUpdating.indexOf(date._id) !== -1"
+            class="date-loader"
+          />
+          <div
+            v-if="datesLoading === true || datesDateUpdating.length !== 0"
+            class="date-mask"
+          />
+        </div>
+      </section>
     </div>
     <section
       :class="{
@@ -159,36 +183,45 @@ const passed = (date: any) => {
       <p>Nadchodzące wydarzenia</p>
     </section>
     <div
+      id="eventsModal"
       :class="{
         'date-items_container': true,
         'closed': !state.eventsOpen
       }"
-      :style="{'max-height': `${(orderedOneTimeDates.length * 44) + 12}px`}"
+      :style="{'max-height': `${state.eventsOpenHeight + 20}px`}"
     >
-      <div
-        v-for="date of orderedOneTimeDates"
-        :key="date.id"
-        :class="{'date-container': true,
-                'grey': passed(date) === true,
-                'loading': datesDateUpdating.indexOf(date._id) !== -1}"
-        @click="openEditModal(date)"
+      <p
+        class="date-placeholder"
+        v-if="orderedOneTimeDates.length === 0"
       >
-        <p class="date-format">
-          {{ date.day }}.{{ date.month }}.{{ date.year }}
-        </p>
-        <p class="date-event">
-          {{ date.event }}
-        </p>
+        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole ekranu.
+      </p>
+      <section v-if="orderedOneTimeDates.length !== 0">
         <div
-          v-if="(datesLoading === true && datesDateUpdating.length === 0)
-            || datesDateUpdating.indexOf(date._id) !== -1"
-          class="date-loader"
-        />
-        <div
-          v-if="datesLoading === true || datesDateUpdating.length !== 0"
-          class="date-mask"
-        />
-      </div>
+          v-for="date of orderedOneTimeDates"
+          :key="date.id"
+          :class="{'date-container': true,
+                  'grey': passed(date) === true,
+                  'loading': datesDateUpdating.indexOf(date._id) !== -1}"
+          @click="openEditModal(date)"
+        >
+          <p class="date-format">
+            {{ date.day }}.{{ date.month }}.{{ date.year }}
+          </p>
+          <p class="date-event">
+            {{ date.event }}
+          </p>
+          <div
+            v-if="(datesLoading === true && datesDateUpdating.length === 0)
+              || datesDateUpdating.indexOf(date._id) !== -1"
+            class="date-loader"
+          />
+          <div
+            v-if="datesLoading === true || datesDateUpdating.length !== 0"
+            class="date-mask"
+          />
+        </div>
+      </section>
     </div>
     <section @click="openModal">
       <AddButton />
@@ -286,7 +319,7 @@ const passed = (date: any) => {
     align-items: center;
     margin: 10px;
     border: 2px solid $border-green;
-    height: 25px;
+    min-height: 25px;
     font-size: 14px;
     z-index: 1;
     background-color: $white;
@@ -334,6 +367,14 @@ const passed = (date: any) => {
     }
   }
 
+  &-placeholder {
+    padding: 10px;
+    color: $grey;
+    text-align: center;
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
+
   &-format {
     flex: 1;
     display: flex;
@@ -376,7 +417,7 @@ const passed = (date: any) => {
 
     &-container {
       font-size: 18px;
-      height: 30px;
+      min-height: 30px;
       border: 1px solid $border-green;
 
       &.grey {

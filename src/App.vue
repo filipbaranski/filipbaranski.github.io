@@ -12,17 +12,21 @@ const authStore = useAuthStore();
 onMounted(() => {
   const token = localStorage.getItem('userToken');
   const id = localStorage.getItem('userId');
-  if (token !== null && id !== null) {
+  const role = localStorage.getItem('userRole');
+  if (token !== null && id !== null && role !== null) {
     authStore.user.token = token;
     authStore.user.id = id;
+    authStore.user.role = role;
     const date = new Date();
     useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
     useDatesStore().getDates();
   } else {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
     authStore.user.token = '';
     authStore.user.id = '';
+    authStore.user.role = '';
     router.push('/login');
   }
 });

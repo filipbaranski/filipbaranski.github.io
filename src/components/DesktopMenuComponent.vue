@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
 </script>
 
 <template>
   <nav class="menu-desktop">
-    <RouterLink to="/calendar">Kalendarz</RouterLink>
+    <RouterLink v-if="user.role === 'admin'" to="/calendar">Kalendarz</RouterLink>
     <RouterLink to="/events">Daty</RouterLink>
   </nav>
 </template>

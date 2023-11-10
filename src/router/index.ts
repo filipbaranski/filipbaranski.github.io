@@ -46,12 +46,15 @@ const router = createRouter({
 const checkLsAuth = (authStore: any) => {
   const token = localStorage.getItem('userToken');
   const id = localStorage.getItem('userId');
+  const role = localStorage.getItem('userRole');
 
-  if (token === null || token === "" || id === null || id === "") {
+  if (token === null || token === "" || id === null || id === "" || role === null || role === "") {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
     authStore.user.token = '';
     authStore.user.id = '';
+    authStore.user.role = '';
   }
 }
 
@@ -65,6 +68,9 @@ router.beforeEach(async (to, from) => {
     return { name: 'login' }
   }
   if (isAuthenticated && to.name === 'login' && typeof from.path !== "undefined") {
+    return { name: 'dashboard' }
+  }
+  if (to.name === 'calendar' && authStore.user.role !== 'admin') {
     return { name: 'dashboard' }
   }
   if (authStore.lastDay === '') {

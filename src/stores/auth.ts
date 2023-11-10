@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('authStore', {
     user: {
       id: '',
       token: '',
+      role: '',
     },
     lastDay: '',
     error: false,
@@ -17,17 +18,20 @@ export const useAuthStore = defineStore('authStore', {
     isAuthenticated(state) {
       const result = (state.user.token === '' || state.user.id === '') ? false : true;
       return result;
-    },
+    }
   },
   actions: {
     async login(username: String, password: String) {
       this.loading = true;
       await client.post('/signin', JSON.stringify({ username, password }))
         .then((response) => {
+          console.log(response)
           localStorage.setItem('userToken', response.data.token);
           localStorage.setItem('userId', response.data.id);
+          localStorage.setItem('userRole', response.data.role);
           this.user.token = response.data.token;
           this.user.id = response.data.id;
+          this.user.role = response.data.role;
           this.router.push('/');
         })
         .then(() => {
