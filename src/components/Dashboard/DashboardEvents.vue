@@ -49,9 +49,9 @@ const eventFilter = (daysLeft: any) => {
 </script>
 
 <template>
-  <section class="dates-container" v-if="upcomingEvents.length !== 0">
+  <section class="dates-container">
     <RouterLink class="dates-link" to="/events">
-      <div class="dates">
+      <div v-if="upcomingEvents.length !== 0" class="dates">
         <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
         <section v-for="n in daysInAdvance + 1" :key="n">
           <div v-if="eventFilter(n - 1).length !== 0" class="dates-block">
@@ -72,6 +72,12 @@ const eventFilter = (daysLeft: any) => {
             </span>
           </div>
         </section>
+      </div>
+      <div v-if="upcomingEvents.length === 0" class="dates">
+        <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
+        <div class="dates-block">
+          <p class="dates-placeholder">Brak nadchodzących wydarzeń w najbliżych siedmiu dniach</p>
+        </div>
       </div>
     </RouterLink>
   </section>
@@ -121,6 +127,14 @@ const eventFilter = (daysLeft: any) => {
 
   &-block {
     margin-bottom: 15px;
+  }
+
+  &-placeholder {
+    padding: 0 30px;
+    color: $grey;
+    text-align: center;
+    font-style: italic;
+    letter-spacing: 0.5px;
   }
 
   &::-webkit-scrollbar {
