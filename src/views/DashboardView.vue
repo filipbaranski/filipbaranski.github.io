@@ -78,7 +78,7 @@ onMounted(() => {
   position: relative;
 
   &-background {
-    height: calc(100vh - 155px);
+    height: calc(100vh - 145px);
     opacity: 0.4;
     background-image: url('../assets/icon.png');
     background-repeat: no-repeat;
@@ -95,7 +95,7 @@ onMounted(() => {
   &-bottom_container {
     position: absolute;
     width: 100%;
-    bottom: 20px;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -107,7 +107,7 @@ onMounted(() => {
 @media only screen and (min-width: 768px) {
   .dashboard {
     &-background {
-      height: calc(100vh - 175px);
+      height: calc(100vh - 190px);
     }
   }
 }
