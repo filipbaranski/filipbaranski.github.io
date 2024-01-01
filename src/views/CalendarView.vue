@@ -40,7 +40,7 @@ const openEditModal = (day: number) => {
     || state.year !== state.currentDate.getFullYear())
     && calendarStore.calendarLoading === false
     && calendarStore.calendarDaysUpdating.length === 0) {
-    const { _id, red, number, is_cube } = calendarStore.calendar;
+    const { _id, red, is_cube } = calendarStore.calendar;
     const data = {
       date: `${day >= 10
         ? day : `0${day}`}.${state.month >= 9 ? state.month + 1
@@ -49,7 +49,6 @@ const openEditModal = (day: number) => {
       day,
       month: state.month,
       year: state.year,
-      number: number[day - 1],
       red: red.indexOf(day) !== -1,
       is_cube: is_cube.indexOf(day) !== -1,
     };
@@ -180,9 +179,6 @@ const loadMonth = async (direction: any) => {
             state.year !== currentDate.getFullYear()"
           class="calendar-day-footer"
         >
-          <p>
-            {{ calendar.number[day - 1] }}
-          </p>
           <img
             :src="calendar.is_cube.indexOf(day) === -1 ? Cube : CubeWhite"
           >

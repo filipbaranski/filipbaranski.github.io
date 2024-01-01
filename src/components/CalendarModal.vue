@@ -19,18 +19,16 @@ const state = reactive({
   day: props.data.day,
   month: props.data.month,
   year: props.data.year,
-  number: props.data.number,
   red: props.data.red,
   is_cube: props.data.is_cube,
 });
 
 const update = () => {
-  const { id, day, month, year, number, red, is_cube } = state;
+  const { id, day, month, year, red, is_cube } = state;
   const payload = {
     day,
     month,
     year,
-    number,
     red,
     is_cube,
   };
@@ -81,12 +79,6 @@ onBeforeMount(() => {
           </label>
         </div>
       </div>
-      <!-- <input
-        v-model="state.number"
-        type="text"
-        placeholder="Powtórzenia"
-        spellcheck="false"
-      > -->
       <footer>
         <button
           :disabled="calendarDaysUpdating.length !== 0"

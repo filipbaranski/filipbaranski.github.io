@@ -17,7 +17,7 @@ const state = reactive({
 });
 
 const editedData = computed(() => {
-  const { _id, red, number, is_cube } = calendar.value;
+  const { _id, red, is_cube } = calendar.value;
   const day = state.currentDay;
   const data = {
     date: `${day >= 10
@@ -27,7 +27,6 @@ const editedData = computed(() => {
     day,
     month: state.month,
     year: state.year,
-    number: number[day - 1],
     red: red.indexOf(day) !== -1,
     is_cube: is_cube.indexOf(day) !== -1,
   };
@@ -52,9 +51,6 @@ const editedData = computed(() => {
     <div class="calendar_day">
       <div :class="{'calendar_day-circle': true, 'red': calendar.red.indexOf(state.currentDay) !== -1}"/>
       <img :src="calendar.is_cube.indexOf(state.currentDay) === -1 ? Cube : CubeWhite">
-      <!-- <p>
-        {{ calendar.number[state.currentDay - 1] || 0 }}
-      </p> -->
     </div>
   </section>
 </template>
