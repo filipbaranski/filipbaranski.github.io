@@ -8,7 +8,7 @@ type BasicDateType = {
 
 const emptyCalendar = ({ month, year, user }: {month: any, year: any, user: any}) => ({
   _id: "",
-  no_cube: [] as any[],
+  is_cube: [] as any[],
   number: [null] as any[],
   red: [] as any[],
   month,
@@ -24,7 +24,7 @@ const isCalendarDataTheSame = (data: any, cache: any) => {
   const newId = newData._id.toString();
   const cachedId = cachedData._id.toString();
   if (newId !== cachedId) return false;
-  const relevantData: any = { no_cube: newData.no_cube, red: newData.red, number: newData.number };
+  const relevantData: any = { is_cube: newData.is_cube, red: newData.red, number: newData.number };
   Object.keys(relevantData).forEach((key) => {
     const cachedItem = cachedData[key].toString();
     const newItem = relevantData[key].toString();
@@ -38,7 +38,7 @@ export const useCalendarStore = defineStore('calendarStore', {
   state: () => ({
     calendar: {
       _id: "",
-      no_cube: [],
+      is_cube: [],
       number: [null],
       red: [],
       month: 0,
@@ -92,7 +92,7 @@ export const useCalendarStore = defineStore('calendarStore', {
       const payload = {
         number: [...calendar.number],
         red: [...calendar.red],
-        no_cube: [...calendar.no_cube],
+        is_cube: [...calendar.is_cube],
         userId: localStorage.getItem('userId'),
       };
       payload.number[data.day - 1] = parseInt(data.number, 10);
@@ -101,10 +101,10 @@ export const useCalendarStore = defineStore('calendarStore', {
       } else if (payload.red.indexOf(data.day) !== -1 && data.red === false) {
         payload.red = payload.red.filter((dates) => dates !== data.day);
       }
-      if (payload.no_cube.indexOf(data.day) === -1 && data.no_cube === true) {
-        payload.no_cube.push(data.day);
-      } else if (payload.no_cube.indexOf(data.day) !== -1 && data.no_cube === false) {
-        payload.no_cube = payload.no_cube.filter((dates) => dates !== data.day);
+      if (payload.is_cube.indexOf(data.day) === -1 && data.is_cube === true) {
+        payload.is_cube.push(data.day);
+      } else if (payload.is_cube.indexOf(data.day) !== -1 && data.is_cube === false) {
+        payload.is_cube = payload.is_cube.filter((dates) => dates !== data.day);
       }
       await client.patch(`/calendar/${body.id}`, JSON.stringify(payload))
         .then(() => {

@@ -21,18 +21,18 @@ const state = reactive({
   year: props.data.year,
   number: props.data.number,
   red: props.data.red,
-  no_cube: props.data.no_cube,
+  is_cube: props.data.is_cube,
 });
 
 const update = () => {
-  const { id, day, month, year, number, red, no_cube } = state;
+  const { id, day, month, year, number, red, is_cube } = state;
   const payload = {
     day,
     month,
     year,
     number,
     red,
-    no_cube,
+    is_cube,
   };
   calendarStore.updateCalendar({ id, payload });
   emit('closeModal');
@@ -71,12 +71,12 @@ onBeforeMount(() => {
         <div class="modal-section">
           <input
             id="cube"
-            v-model="state.no_cube"
+            v-model="state.is_cube"
             type="checkbox"
           >
           <label for="cube">
             <img
-              :src="state.no_cube ? Cube : CubeWhite"
+              :src="state.is_cube ? CubeWhite : Cube"
             >
           </label>
         </div>
