@@ -9,7 +9,6 @@ type BasicDateType = {
 const emptyCalendar = ({ month, year, user }: {month: any, year: any, user: any}) => ({
   _id: "",
   is_cube: [] as any[],
-  number: [null] as any[],
   red: [] as any[],
   month,
   year,
@@ -24,7 +23,7 @@ const isCalendarDataTheSame = (data: any, cache: any) => {
   const newId = newData._id.toString();
   const cachedId = cachedData._id.toString();
   if (newId !== cachedId) return false;
-  const relevantData: any = { is_cube: newData.is_cube, red: newData.red, number: newData.number };
+  const relevantData: any = { is_cube: newData.is_cube, red: newData.red };
   Object.keys(relevantData).forEach((key) => {
     const cachedItem = cachedData[key].toString();
     const newItem = relevantData[key].toString();
@@ -39,7 +38,6 @@ export const useCalendarStore = defineStore('calendarStore', {
     calendar: {
       _id: "",
       is_cube: [],
-      number: [null],
       red: [],
       month: 0,
       year: 0,
@@ -90,12 +88,10 @@ export const useCalendarStore = defineStore('calendarStore', {
       }
       const calendar = { ...this.calendar };
       const payload = {
-        number: [...calendar.number],
         red: [...calendar.red],
         is_cube: [...calendar.is_cube],
         userId: localStorage.getItem('userId'),
       };
-      payload.number[data.day - 1] = parseInt(data.number, 10);
       if (payload.red.indexOf(data.day) === -1 && data.red === true) {
         payload.red.push(data.day);
       } else if (payload.red.indexOf(data.day) !== -1 && data.red === false) {
