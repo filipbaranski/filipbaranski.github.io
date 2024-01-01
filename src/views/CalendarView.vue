@@ -40,7 +40,7 @@ const openEditModal = (day: number) => {
     || state.year !== state.currentDate.getFullYear())
     && calendarStore.calendarLoading === false
     && calendarStore.calendarDaysUpdating.length === 0) {
-    const { _id, red, number, no_cube } = calendarStore.calendar;
+    const { _id, red, number, is_cube } = calendarStore.calendar;
     const data = {
       date: `${day >= 10
         ? day : `0${day}`}.${state.month >= 9 ? state.month + 1
@@ -51,7 +51,7 @@ const openEditModal = (day: number) => {
       year: state.year,
       number: number[day - 1],
       red: red.indexOf(day) !== -1,
-      no_cube: no_cube.indexOf(day) !== -1,
+      is_cube: is_cube.indexOf(day) !== -1,
     };
     state.editedData = data;
     state.editModalOpen = true;
@@ -111,7 +111,7 @@ const loadMonth = async (direction: any) => {
     />
     <nav>
       <button
-        :disabled="(state.year === 2021 && state.month === 0)
+        :disabled="(state.year < 2024)
           || calendarLoading
           || calendarDaysUpdating.length !== 0"
         @click="loadMonth('previous')"
@@ -184,7 +184,7 @@ const loadMonth = async (direction: any) => {
             {{ calendar.number[day - 1] }}
           </p>
           <img
-            :src="calendar.no_cube.indexOf(day) === -1 ? CubeWhite : Cube"
+            :src="calendar.is_cube.indexOf(day) === -1 ? Cube : CubeWhite"
           >
         </div>
       </div>
