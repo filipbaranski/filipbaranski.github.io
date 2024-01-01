@@ -24,6 +24,8 @@ onMounted(() => {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('dates');
+    localStorage.removeItem('calendar');
     authStore.user.token = '';
     authStore.user.id = '';
     authStore.user.role = '';
