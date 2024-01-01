@@ -27,7 +27,7 @@ const { datesDateUpdating, datesLoading } = storeToRefs(datesStore);
   right: 30px;
   width: 45px;
   height: 45px;
-  border-radius: 100%;
+  border-radius: $full-border-radius;
   background-color: $border-green;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@ const { datesDateUpdating, datesLoading } = storeToRefs(datesStore);
     right: 30px;
     width: 45px;
     height: 45px;
-    border-radius: 100%;
+    border-radius: $full-border-radius;
     background-color: $border-green;
   }
 }

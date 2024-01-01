@@ -100,11 +100,12 @@ const eventFilter = (daysLeft: any) => {
   overflow-y: scroll;
   padding: 15px 5px 0;
   border: 2px solid $border-green;
+  border-radius: $standard-border-radius;
   font-size: 14px;
 
   &-container {
     position: relative;
-    width: 75vw;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -147,7 +148,7 @@ const eventFilter = (daysLeft: any) => {
     right: 10px;
     height: 20px;
     width: 20px;
-    border-radius: 20px;
+    border-radius: $full-border-radius;
     border-top: 3px solid $border-green;
     border-bottom: 3px solid $border-green;
     border-left: 3px solid transparent;
@@ -162,7 +163,7 @@ const eventFilter = (daysLeft: any) => {
     font-size: 18px;
 
     &-container {
-      width: 500px;
+      width: 600px;
     }
   }
 }

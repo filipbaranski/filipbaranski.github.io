@@ -78,10 +78,11 @@ const editedData = computed(() => {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border-radius: $standard-border-radius;
 
   &-container {
     position: relative;
-    width: 75vw;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -93,7 +94,7 @@ const editedData = computed(() => {
   &-circle {
     width: 24px;
     height: 24px;
-    border-radius: 40px;
+    border-radius: $full-border-radius;
     background: -webkit-linear-gradient(225deg, rgba(153,204,51,0.8) 0%, rgba(153,204,51,1) 60%);
 
     &.red {
@@ -126,7 +127,7 @@ const editedData = computed(() => {
     right: 10px;
     height: 20px;
     width: 20px;
-    border-radius: 20px;
+    border-radius: $full-border-radius;
     border-top: 3px solid $border-green;
     border-bottom: 3px solid $border-green;
     border-left: 3px solid transparent;
@@ -141,7 +142,7 @@ const editedData = computed(() => {
     font-size: 18px;
 
     &-container {
-      width: 500px;
+      width: 600px;
     }
   }
 }

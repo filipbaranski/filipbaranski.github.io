@@ -185,7 +185,7 @@ const detectKey = (e: any) => {
   padding: 5px 15px;
   border: 2px solid $red;
   background-color: $pale-red;
-  border-radius: 5px;
+  border-radius: $standard-border-radius;
   margin: 0 auto 15px;
   max-height: 0;
   opacity: 0;
@@ -218,12 +218,12 @@ const detectKey = (e: any) => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
+    width: calc(100% - 50px);
     max-width: 400px;
     height: auto;
     background-color: $white;
     padding: 15px;
-    border-radius: 6px;
+    border-radius: $standard-border-radius;
     z-index: 20;
     box-shadow: $box-shadow;
     animation: moduleUpFadeIn 0.5s;
@@ -257,7 +257,7 @@ const detectKey = (e: any) => {
         outline: none;
         width: 35%;
         padding: 8px;
-        border-radius: 5px;
+        border-radius: $standard-border-radius;
         color: white;
 
         &:hover {

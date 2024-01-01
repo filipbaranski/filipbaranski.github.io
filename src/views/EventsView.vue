@@ -125,6 +125,7 @@ onUpdated(() => getHeights());
     <section
       :class="{
         'date-header': true,
+        'date-header-first': true,
         'open': state.yearlyOpen
       }"
       @click="(e: Event) => toggle(e, 'yearlyOpen')"
@@ -248,8 +249,6 @@ onUpdated(() => getHeights());
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 1024px;
-  margin: auto;
 
   &-loader {
     position: absolute;
@@ -257,7 +256,7 @@ onUpdated(() => getHeights());
     right: 5px;
     height: 14px;
     width: 14px;
-    border-radius: 20px;
+    border-radius: $full-border-radius;
     border-top: 3px solid $border-green;
     border-bottom: 3px solid $border-green;
     border-left: 3px solid transparent;
@@ -284,12 +283,22 @@ onUpdated(() => getHeights());
     height: 14px;
     font-size: 18px;
     padding: 10px 0;
-    cursor: pointer;
     margin-top: 10px;
+    cursor: pointer;
     border: 2px solid $border-green;
     transition: all 0.3s;
+    border-top-right-radius: $standard-border-radius;
+    border-top-left-radius: $standard-border-radius;
+    border-bottom-right-radius: $standard-border-radius;
+    border-bottom-left-radius: $standard-border-radius;
+
+    &-first {
+      margin-top: 0;
+    }
 
     &.open {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
       background-color: $pale-green;
       transition: all 0.3s;
     }
@@ -304,6 +313,8 @@ onUpdated(() => getHeights());
     max-height: 0px;
     overflow: hidden;
     transition: all 0.3s;
+    border-bottom-right-radius: $standard-border-radius;
+    border-bottom-left-radius: $standard-border-radius;
 
     &.closed {
       opacity: 0;
@@ -323,6 +334,7 @@ onUpdated(() => getHeights());
     font-size: 14px;
     z-index: 1;
     background-color: $white;
+    border-radius: $standard-border-radius;
 
     &.grey {
       border: 2px solid $grey;
@@ -403,7 +415,6 @@ onUpdated(() => getHeights());
     &-header {
       font-size: 20px;
       height: 20px;
-      margin-top: 15px;
 
       &:hover {
         background-color: $pale-green;
