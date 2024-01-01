@@ -78,7 +78,7 @@ onMounted(() => {
   position: relative;
 
   &-background {
-    height: calc(100vh - 145px);
+    height: calc(100vh - 155px);
     opacity: 0.4;
     background-image: url('../assets/icon.png');
     background-repeat: no-repeat;
