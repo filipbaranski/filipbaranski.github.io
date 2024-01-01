@@ -150,7 +150,6 @@ onBeforeMount(() => {
   &-selects {
     display: flex;
     justify-content: space-evenly;
-    margin-bottom: 20px;
   }
 
   &-mask {
@@ -163,7 +162,7 @@ onBeforeMount(() => {
   &-circle {
     width: 34px;
     height: 34px;
-    border-radius: 40px;
+    border-radius: $full-border-radius;
     background: -webkit-linear-gradient(225deg, rgba(153,204,51,0.8) 0%, rgba(153,204,51,1) 60%);
 
     &.red {
@@ -172,26 +171,28 @@ onBeforeMount(() => {
   }
 
   &-proper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
+    width: calc(100% - 50px);
     max-width: 400px;
     height: auto;
     background-color: $white;
     padding: 15px;
-    border-radius: 6px;
+    border-radius: $standard-border-radius;
     z-index: 20;
     box-shadow: $box-shadow;
     animation: moduleUpFadeIn 0.5s;
 
     header {
       font-size: 24px;
-      margin: 0 auto 20px;
+      margin: 0 auto;
       width: fit-content;
       border-bottom: 2px solid $border-green;
-      padding: 2px 6px;
     }
 
     textarea {
@@ -229,14 +230,13 @@ onBeforeMount(() => {
     footer {
       display: flex;
       justify-content: space-around;
-      margin-top: 5px;
 
       button {
         border: none;
         outline: none;
         width: 75px;
         padding: 8px;
-        border-radius: 5px;
+        border-radius: $standard-border-radius;
         color: white;
 
         &:hover {

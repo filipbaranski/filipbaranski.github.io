@@ -51,7 +51,7 @@ const onSubmit = () => {
 .imageContainer {
   width: 130px;
   height: 130px;
-  border-radius: 130px;
+  border-radius: $full-border-radius;
   border: 3px solid $border-green;
   margin: 20px 0;
   display: flex;
@@ -78,7 +78,7 @@ input {
   width: calc(100% - 40px);
   max-width: 400px;
   margin-bottom: 20px;
-  border-radius: 20px;
+  border-radius: $login-input-border-radius;
   border: 2px solid $border-green;
   padding: 10px 20px;
   letter-spacing: 0.6px;
@@ -87,7 +87,7 @@ input {
 button {
   width: 100%;
   max-width: 400px;
-  border-radius: 20px;
+  border-radius: $login-input-border-radius;
   outline: none;
   border: none;
   background-color: $border-green;

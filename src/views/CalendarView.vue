@@ -111,7 +111,7 @@ const loadMonth = async (direction: any) => {
     />
     <nav>
       <button
-        :disabled="(state.year < 2024)
+        :disabled="(state.year === 2024 && state.month === 0)
           || calendarLoading
           || calendarDaysUpdating.length !== 0"
         @click="loadMonth('previous')"
@@ -208,9 +208,8 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px auto 0;
+  margin: 0 auto;
   max-width: 600px;
-  padding: 0 8px;
 
   h2 {
     text-transform: capitalize;
@@ -223,7 +222,7 @@ nav {
     outline: none;
     background-color: transparent;
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: $standard-border-radius;
     font-size: 11px;
 
     &:hover {
@@ -258,7 +257,7 @@ nav {
     right: 10px;
     height: 20px;
     width: 20px;
-    border-radius: 20px;
+    border-radius: $full-border-radius;
     border-top: 3px solid $border-green;
     border-bottom: 3px solid $border-green;
     border-left: 3px solid transparent;
@@ -276,7 +275,6 @@ nav {
     flex-wrap: wrap;
     max-width: 600px;
     margin: 40px auto 0;
-    padding: 0 8px;
     z-index: 0;
   }
 
@@ -289,6 +287,7 @@ nav {
     height: 50px;
     font-weight: 600;
     border: 2px solid $white;
+    border-radius: $standard-border-radius;
 
     img {
       width: 20px;
@@ -346,8 +345,6 @@ nav {
 
 @media only screen and (min-width: 1024px) {
   nav {
-    margin-top: 15px;
-
     h2 {
       font-size: 20px;
     }
