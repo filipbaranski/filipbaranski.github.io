@@ -52,11 +52,13 @@ a {
 
 .innerBorder {
   padding: 20px 10px 10px;
+  min-height: calc(100vh - 145px);
 }
 
 @media only screen and (min-width: 768px) {
   .innerBorder {
-    padding: 35px 100px 10px;
+    padding: 35px 100px 25px;
+    min-height: calc(100vh - 190px);
   }
 }
 
