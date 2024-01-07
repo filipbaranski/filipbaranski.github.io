@@ -204,7 +204,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
+  width: 100%;
   max-width: 600px;
 
   h2 {
@@ -235,6 +235,10 @@ nav {
 }
 
 .calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   &-mask {
     position: absolute;
     top: -5px;
@@ -269,8 +273,9 @@ nav {
     grid-template-columns: repeat(7, 1fr);
     grid-gap: 4px;
     flex-wrap: wrap;
+    width: 100%;
     max-width: 600px;
-    margin: 40px auto 0;
+    margin-top: 40px;
     z-index: 0;
   }
 
