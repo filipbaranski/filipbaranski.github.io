@@ -35,6 +35,10 @@ const validate = (data: any) => {
     year,
     event,
   } = data;
+  if (isNaN(Number(day)) || isNaN(Number(month)) || isNaN(Number(year))) {
+    state.error_msg = 'Niepoprawny format daty';
+    return false;
+  }
   if (day === '' || month === '' || event === '') {
     state.error_msg = 'Uzupełnij wszystkie wymagane pola';
     return false;
@@ -63,11 +67,12 @@ const update = () => {
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
+    const sanitizedEvent = state.date.event.replace(/[<>]/g, '').trim();
     const payload = {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
-      event: state.date.event.trim(),
+      event: sanitizedEvent,
     };
     if (state.date.year !== '') payload.year = state.date.year;
     datesStore.updateDate({ id, payload });
@@ -81,11 +86,12 @@ const send = () => {
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
+    const sanitizedEvent = state.date.event.replace(/[<>]/g, '').trim();
     const payload = {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
-      event: state.date.event.trim(),
+      event: sanitizedEvent,
     };
     if (state.date.year !== '') payload.year = state.date.year;
     datesStore.postDate(payload);
