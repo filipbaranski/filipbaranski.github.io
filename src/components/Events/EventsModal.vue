@@ -68,7 +68,6 @@ const update = () => {
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
       event: state.date.event.trim(),
-      userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;
     datesStore.updateDate({ id, payload });
@@ -87,7 +86,6 @@ const send = () => {
       month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
       year: '',
       event: state.date.event.trim(),
-      userId: localStorage.getItem('userId'),
     };
     if (state.date.year !== '') payload.year = state.date.year;
     datesStore.postDate(payload);

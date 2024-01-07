@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useCalendarStore } from '@/stores/calendar';
+import { clearStorage, getStoredUser } from '../utils/helpers';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -44,19 +45,11 @@ const router = createRouter({
 })
 
 const checkLsAuth = (authStore: any) => {
-  const token = localStorage.getItem('userToken');
-  const id = localStorage.getItem('userId');
-  const role = localStorage.getItem('userRole');
+  const { token, id, role } = getStoredUser();
 
-  if (token === null || token === "" || id === null || id === "" || role === null || role === "") {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('dates');
-    localStorage.removeItem('calendar');
-    authStore.user.token = '';
-    authStore.user.id = '';
-    authStore.user.role = '';
+  if (token === null || id === null || role === null) {
+    clearStorage();
+    authStore.clearUserData();
   }
 }
 
@@ -66,7 +59,7 @@ router.beforeEach(async (to, from) => {
   const isAuthenticated = authStore.isAuthenticated;
   const currentDate = new Date();
   const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-  if (!isAuthenticated &&  to.name !== 'login') {
+  if (!isAuthenticated && to.name !== 'login') {
     return { name: 'login' }
   }
   if (isAuthenticated && to.name === 'login' && typeof from.path !== "undefined") {

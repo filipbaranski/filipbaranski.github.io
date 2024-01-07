@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '../router';
+import { clearStorage, getStoredUser } from './helpers';
 
 const api = import.meta.env.VITE_SERVER_URL;
 
@@ -11,10 +12,9 @@ export const client = axios.create({
 });
 
 client.interceptors.request.use(config => {
-  const userToken = localStorage.getItem('userToken');
-  const userId = localStorage.getItem('userId');
-  config.headers['bearer'] = userToken || "";
-  config.headers['id'] = userId || "";
+  const { token, id } = getStoredUser();
+  config.headers['bearer'] = token || "";
+  config.headers['id'] = id || "";
 
   return config;
 });
@@ -24,11 +24,7 @@ client.interceptors.response.use(response => {
 }, (error) => {
   const responseStatus = error.response.status;
   if (responseStatus === 401) {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('dates');
-    localStorage.removeItem('calendar');
+    clearStorage();
     router.push('/login');
   }
   return Promise.reject(error);

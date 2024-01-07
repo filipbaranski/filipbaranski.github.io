@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { client } from '@/utils/axios-instance';
+import { useAuthStore } from '@/stores/auth';
+import { getStoredCalendar, setStoredCalendar } from '@/utils/helpers';
 
 type BasicDateType = {
   month: Number,
@@ -50,14 +52,14 @@ export const useCalendarStore = defineStore('calendarStore', {
     async getMonth(body: BasicDateType) {
       let result;
       this.calendarLoading = true;
-      const cachedCalendar = localStorage.getItem('calendar');
+      const cachedCalendar = getStoredCalendar();
       const storedCalendar = JSON.parse(cachedCalendar);
       if (cachedCalendar !== null) this.calendar = storedCalendar;
-      const formattedRequest = `${body.year}/${body.month}/${localStorage.getItem('userId')}`;
+      const formattedRequest = `${body.year}/${body.month}/${useAuthStore().user.id}`;
       await client.get(`/calendar/${formattedRequest}`)
         .then((response) => {
           if (isCalendarDataTheSame(response.data, storedCalendar) === false) {
-            localStorage.setItem('calendar', JSON.stringify(response.data));
+            setStoredCalendar(JSON.stringify(response.data));
             this.calendar = response.data;
           }
           this.calendarLoading = false;
@@ -67,7 +69,7 @@ export const useCalendarStore = defineStore('calendarStore', {
         .catch(() => {
           if (body.month !== Number(storedCalendar.month)) {
             // For entering new month offline
-            this.calendar = emptyCalendar({ month: body.month, year: body.year, user: localStorage.getItem('userId') });
+            this.calendar = emptyCalendar({ month: body.month, year: body.year, user: useAuthStore().user.id });
           }
           this.calendarLoading = false;
           this.calendarDaysUpdating = [];
@@ -90,7 +92,7 @@ export const useCalendarStore = defineStore('calendarStore', {
       const payload = {
         red: [...calendar.red],
         is_cube: [...calendar.is_cube],
-        userId: localStorage.getItem('userId'),
+        userId: useAuthStore().user.id,
       };
       if (payload.red.indexOf(data.day) === -1 && data.red === true) {
         payload.red.push(data.day);

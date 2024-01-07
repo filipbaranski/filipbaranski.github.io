@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { client } from '@/utils/axios-instance';
+import { useAuthStore } from '@/stores/auth';
+import { getStoredDates, setStoredDates } from '@/utils/helpers';
 
 const isDataTheSame = (data: any, cache: any) => {
   let returnValue = true;
@@ -31,15 +33,15 @@ export const useDatesStore = defineStore('datesStore', {
   actions: {
     async getDates() {
       this.datesLoading = true;
-      const cachedDates = localStorage.getItem('dates');
+      const cachedDates = getStoredDates();
       const storedDates = JSON.parse(cachedDates);
       if (cachedDates !== null) {
         this.dates = storedDates;
       }
-      await client.get(`/dates/${localStorage.getItem('userId')}`)
+      await client.get(`/dates/${useAuthStore().user.id}`)
         .then((response) => {
           if (isDataTheSame(response.data, storedDates) === false) {
-            localStorage.setItem('dates', JSON.stringify(response.data));
+            setStoredDates(JSON.stringify(response.data));
             this.dates = response.data;
           }
           this.datesLoading = false;
@@ -52,6 +54,7 @@ export const useDatesStore = defineStore('datesStore', {
     },
     async postDate(payload: any) {
       this.datesLoading = true;
+      payload.userId = useAuthStore().user.id;
       await client.post('/date', JSON.stringify(payload))
         .then(() => this.getDates())
         .catch(() => {
@@ -60,6 +63,7 @@ export const useDatesStore = defineStore('datesStore', {
     },
     async updateDate(body: any) {
       const isPresent = this.datesDateUpdating.indexOf(body.id) !== -1;
+      body.payload.userId = useAuthStore().user.id;
       if (isPresent) {
         this.datesDateUpdating.filter((item) => item !== body.id);
       } else {
