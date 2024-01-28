@@ -137,7 +137,10 @@ const loadMonth = async (direction: any) => {
       <div
         v-for="day of 7"
         :key="`empty-${day}`"
-        class="calendar-days-name"
+        :class="{
+          'calendar-days-name': true,
+          'weekend': day > 5,
+          }"
       >
         {{ dayNames[day - 1] }}
       </div>
@@ -362,14 +365,19 @@ nav {
 
     &-name {
       margin: 5px 0;
-      padding: 1px 0;
+      padding: 3px 0;
       text-align: center;
       width: 100%;
-      background-color: $pale-grey;
+      background-color: $button-shadow;
       color: $grey;
       font-size: 14px;
       font-weight: 600;
       border-radius: 20px;
+
+      &.weekend {
+        background-color: $palest-green;
+        color: $border-green;
+      }
     }
   }
 }
