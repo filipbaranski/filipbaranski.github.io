@@ -8,6 +8,7 @@ import CubeWhite from '@/assets/svg/CubeWhite.svg';
 
 const calendarStore = useCalendarStore();
 const { calendar, calendarDaysUpdating, calendarLoading } = storeToRefs(calendarStore);
+const dayNames = ["Pn", "Wt", "Śr", "Czw", "Pt", "Sb", "Nd"];
 
 const currentDate = new Date();
 
@@ -132,6 +133,15 @@ const loadMonth = async (direction: any) => {
         Następny
       </button>
     </nav>
+    <section class="calendar-days">
+      <div
+        v-for="day of 7"
+        :key="`empty-${day}`"
+        class="calendar-days-name"
+      >
+        {{ dayNames[day - 1] }}
+      </div>
+    </section>
     <main
       v-if="calendar.year && calendarDaysUpdating !== null"
       class="calendar-proper"
@@ -242,7 +252,7 @@ nav {
   &-mask {
     position: absolute;
     top: -5px;
-    width: 100%;
+    width: calc(100% + 10px);
     height: calc(100% + 10px);
     background-color: $white;
     z-index: 1000;
@@ -275,7 +285,6 @@ nav {
     flex-wrap: wrap;
     width: 100%;
     max-width: 600px;
-    margin-top: 40px;
     z-index: 0;
   }
 
@@ -340,6 +349,27 @@ nav {
         bottom: 5px;
         left: 5px;
       }
+    }
+  }
+
+  &-days {
+    display: flex;
+    gap: 4px;
+    justify-content: space-around;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+
+    &-name {
+      margin: 5px 0;
+      padding: 1px 0;
+      text-align: center;
+      width: 100%;
+      background-color: $pale-grey;
+      color: $grey;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 20px;
     }
   }
 }
