@@ -79,7 +79,6 @@ const editedData = computed(() => {
   &-container {
     position: relative;
     width: 100%;
-    margin: 0 auto;
   }
 
   &:hover {

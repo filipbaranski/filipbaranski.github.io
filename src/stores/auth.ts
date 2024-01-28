@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { useCalendarStore } from '@/stores/calendar';
 import { useDatesStore } from '@/stores/dates';
 import { client } from '@/utils/axios-instance';
+import { setStoredUser } from '@/utils/helpers';
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
@@ -16,21 +17,28 @@ export const useAuthStore = defineStore('authStore', {
   }),
   getters: {
     isAuthenticated(state) {
-      const result = (state.user.token === '' || state.user.id === '') ? false : true;
+      const result = (
+        state.user.id === '' ||
+        state.user.token === '' ||
+        state.user.role === '') ? false : true;
       return result;
     }
   },
   actions: {
+    async clearUserData() {
+      this.user.token = '';
+      this.user.id = '';
+      this.user.role = '';
+    },
     async login(username: String, password: String) {
       this.loading = true;
       await client.post('/signin', JSON.stringify({ username, password }))
         .then((response) => {
-          localStorage.setItem('userToken', response.data.token);
-          localStorage.setItem('userId', response.data.id);
-          localStorage.setItem('userRole', response.data.role);
-          this.user.token = response.data.token;
-          this.user.id = response.data.id;
-          this.user.role = response.data.role;
+          const userData = response.data;
+          setStoredUser(userData);
+          this.user.token = userData.token;
+          this.user.id = userData.id;
+          this.user.role = userData.role;
           this.router.push('/');
         })
         .then(() => {

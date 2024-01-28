@@ -16,7 +16,9 @@ const cleanError = () => {
 }
 
 const onSubmit = () => {
-  authStore.login(state.name, state.password);
+  const sanitizedName = state.name.replace(/([^\w ]|_)/g, '').trim();
+  const sanitizedPassword = state.password.replace(/[<>]/g, '').trim();
+  authStore.login(sanitizedName, sanitizedPassword);
 }
 </script>
 
@@ -68,7 +70,6 @@ const onSubmit = () => {
 
 form {
   width: 100%;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
 }
@@ -76,7 +77,6 @@ form {
 input {
   outline: none;
   width: calc(100% - 40px);
-  max-width: 400px;
   margin-bottom: 20px;
   border-radius: $login-input-border-radius;
   border: 2px solid $border-green;
@@ -86,7 +86,6 @@ input {
 
 button {
   width: 100%;
-  max-width: 400px;
   border-radius: $login-input-border-radius;
   outline: none;
   border: none;
@@ -118,5 +117,11 @@ button {
   width: 100%;
   max-width: 380px;
   margin-top: 15px;
+}
+
+@media only screen and (min-width: 768px) {
+  form {
+    max-width: 600px;
+  }
 }
 </style>

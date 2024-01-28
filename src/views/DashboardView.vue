@@ -98,6 +98,7 @@ onMounted(() => {
     bottom: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
     animation: moduleUpFadeIn 1s;
     animation-delay: -0.1s;

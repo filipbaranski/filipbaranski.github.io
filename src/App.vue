@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import router from './router';
+import { clearStorage, getStoredUser } from './utils/helpers';
 import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import MainLayout from './layouts/MainLayout.vue';
@@ -10,9 +11,7 @@ import { useDatesStore } from '@/stores/dates';
 const authStore = useAuthStore();
 
 onMounted(() => {
-  const token = localStorage.getItem('userToken');
-  const id = localStorage.getItem('userId');
-  const role = localStorage.getItem('userRole');
+  const { token, id, role } = getStoredUser();
   if (token !== null && id !== null && role !== null) {
     authStore.user.token = token;
     authStore.user.id = id;
@@ -21,14 +20,8 @@ onMounted(() => {
     if (role === 'admin') useCalendarStore().getMonth({ year: date.getFullYear(), month: date.getMonth() + 1 });
     useDatesStore().getDates();
   } else {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('dates');
-    localStorage.removeItem('calendar');
-    authStore.user.token = '';
-    authStore.user.id = '';
-    authStore.user.role = '';
+    clearStorage();
+    authStore.clearUserData();
     router.push('/login');
   }
 });

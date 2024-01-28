@@ -106,7 +106,6 @@ const eventFilter = (daysLeft: any) => {
   &-container {
     position: relative;
     width: 100%;
-    margin: 0 auto;
   }
 
   &-link {
