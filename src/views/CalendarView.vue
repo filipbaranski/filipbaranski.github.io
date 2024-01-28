@@ -298,7 +298,7 @@ nav {
     align-items: center;
     width: 100%;
     height: 50px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     border: 2px solid $white;
     border-radius: $standard-border-radius;
@@ -326,7 +326,7 @@ nav {
       &.blocked {
         cursor: default;
         color: $black;
-        background: $pale-grey;
+        background: $palest-grey;
         &:hover { opacity: 1; }
       }
 
@@ -363,7 +363,7 @@ nav {
       padding: 3px 0;
       text-align: center;
       width: 100%;
-      background-color: $pale-grey;
+      background-color: $palest-grey;
       color: $grey;
       font-size: 12px;
       font-weight: 600;
@@ -391,7 +391,7 @@ nav {
 
   .calendar {
     &-day {
-      font-size: 20px;
+      font-size: 14px;
     }
 
     &-days {
