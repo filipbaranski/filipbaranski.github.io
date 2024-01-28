@@ -232,7 +232,7 @@ nav {
     background-color: transparent;
     padding: 5px 10px;
     border-radius: $standard-border-radius;
-    font-size: 11px;
+    font-size: 12px;
 
     &:hover {
       cursor: pointer;
@@ -298,6 +298,7 @@ nav {
     align-items: center;
     width: 100%;
     height: 50px;
+    font-size: 14px;
     font-weight: 600;
     border: 2px solid $white;
     border-radius: $standard-border-radius;
@@ -325,7 +326,7 @@ nav {
       &.blocked {
         cursor: default;
         color: $black;
-        background: $button-shadow;
+        background: $pale-grey;
         &:hover { opacity: 1; }
       }
 
@@ -340,13 +341,6 @@ nav {
       height: 100%;
       width: 100%;
 
-      p {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font-size: 12px;
-      }
-
       img {
         position: absolute;
         bottom: 5px;
@@ -356,6 +350,7 @@ nav {
   }
 
   &-days {
+    cursor: default;
     display: flex;
     gap: 4px;
     justify-content: space-around;
@@ -368,9 +363,9 @@ nav {
       padding: 3px 0;
       text-align: center;
       width: 100%;
-      background-color: $button-shadow;
+      background-color: $pale-grey;
       color: $grey;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       border-radius: 20px;
 
@@ -390,7 +385,19 @@ nav {
 
     button {
       padding: 10px 20px;
-      font-size: 13px;
+      font-size: 14px;
+    }
+  }
+
+  .calendar {
+    &-day {
+      font-size: 20px;
+    }
+
+    &-days {
+      &-name {
+        font-size: 14px;
+      }
     }
   }
 }
