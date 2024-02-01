@@ -8,7 +8,6 @@ import CubeWhite from '@/assets/svg/CubeWhite.svg';
 
 const calendarStore = useCalendarStore();
 const { calendar, calendarDaysUpdating, calendarLoading } = storeToRefs(calendarStore);
-const dayNames = ["Pn", "Wt", "Śr", "Czw", "Pt", "Sb", "Nd"];
 
 const currentDate = new Date();
 
@@ -133,18 +132,6 @@ const loadMonth = async (direction: any) => {
         Następny
       </button>
     </nav>
-    <section class="calendar-days">
-      <div
-        v-for="day of 7"
-        :key="`empty-${day}`"
-        :class="{
-          'calendar-days-name': true,
-          'weekend': day > 5,
-          }"
-      >
-        {{ dayNames[day - 1] }}
-      </div>
-    </section>
     <main
       v-if="calendar.year && calendarDaysUpdating !== null"
       class="calendar-proper"
@@ -169,6 +156,9 @@ const loadMonth = async (direction: any) => {
           'calendar-day': true,
           'calendar-day-filled': true,
           'red': calendar.red.indexOf(day) !== -1,
+          'weekend': 
+            (day + firstDayOfSelectedMonth.getDay()) % 7 === 0 ||
+            (day + firstDayOfSelectedMonth.getDay()) % 7 === 1,
           'blocked':
             day > state.currentDay &&
             state.month === currentDate.getMonth() &&
@@ -288,6 +278,7 @@ nav {
     flex-wrap: wrap;
     width: 100%;
     max-width: 600px;
+    margin-top: 20px;
     z-index: 0;
   }
 
@@ -334,6 +325,11 @@ nav {
         width: 100%;
         border: 2px solid #151515;
       }
+
+      &.weekend {
+        background-color: $palest-green;
+        color: $border-green;
+      }
     }
 
     &-footer {
@@ -345,33 +341,6 @@ nav {
         position: absolute;
         bottom: 5px;
         left: 5px;
-      }
-    }
-  }
-
-  &-days {
-    cursor: default;
-    display: flex;
-    gap: 4px;
-    justify-content: space-around;
-    margin-top: 20px;
-    width: 100%;
-    max-width: 600px;
-
-    &-name {
-      margin: 5px 0;
-      padding: 3px 0;
-      text-align: center;
-      width: 100%;
-      background-color: $palest-grey;
-      color: $grey;
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 20px;
-
-      &.weekend {
-        background-color: $palest-green;
-        color: $border-green;
       }
     }
   }
@@ -392,12 +361,6 @@ nav {
   .calendar {
     &-day {
       font-size: 14px;
-    }
-
-    &-days {
-      &-name {
-        font-size: 14px;
-      }
     }
   }
 }
