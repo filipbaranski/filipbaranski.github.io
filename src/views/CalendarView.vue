@@ -278,7 +278,7 @@ nav {
     flex-wrap: wrap;
     width: 100%;
     max-width: 600px;
-    margin-top: 40px;
+    margin-top: 30px;
     z-index: 0;
   }
 
