@@ -1,6 +1,3 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <section class="error">
     <p class="errorText">404</p>
@@ -21,8 +18,8 @@
   line-height: 75px;
   font-weight: 800;
   -webkit-background-clip: text;
-	background-clip: text;
-	background-image: url('@/assets/bar360.png');
-	color: transparent;
+  background-clip: text;
+  background-image: url("@/assets/bar360.png");
+  color: transparent;
 }
 </style>

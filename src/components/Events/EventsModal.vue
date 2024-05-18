@@ -1,178 +1,165 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-import { useDatesStore } from '@/stores/dates';
+import { reactive } from "vue";
+import { useDatesStore } from "@/stores/dates";
 
 const datesStore = useDatesStore();
 
-const props = defineProps(['type', 'data']);
+const props = defineProps(["type", "data"]);
 
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(["closeModal"]);
 
 const state = reactive({
   date: {
-    day: props.data?.day || '',
-    month: props.data?.month || '',
-    year: props.type === 'add' ? new Date().getFullYear().toString() : props.data.year,
-    event: props.data?.event || '',
+    day: props.data?.day || "",
+    month: props.data?.month || "",
+    year:
+      props.type === "add"
+        ? new Date().getFullYear().toString()
+        : props.data.year,
+    event: props.data?.event || "",
   },
   error: false,
-  error_msg: '',
+  error_msg: "",
 });
 
 const listOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 const isRealDate = (year: any, month: any, day: any) => {
   if (parseInt(month) > 12) return false;
-  if (parseInt(year) % 4 === 0 && parseInt(month) === 2 && parseInt(day) === 29) return true;
+  if (parseInt(year) % 4 === 0 && parseInt(month) === 2 && parseInt(day) === 29)
+    return true;
   if (parseInt(day) > listOfDays[parseInt(month) - 1]) return false;
   return true;
-}
+};
 
 const validate = (data: any) => {
-  let {
-    day,
-    month,
-    year,
-    event,
-  } = data;
+  let { day, month, year, event } = data;
   if (isNaN(Number(day)) || isNaN(Number(month)) || isNaN(Number(year))) {
-    state.error_msg = 'Niepoprawny format daty';
+    state.error_msg = "Niepoprawny format daty";
     return false;
   }
-  if (day === '' || month === '' || event === '') {
-    state.error_msg = 'Uzupełnij wszystkie wymagane pola';
+  if (day === "" || month === "" || event === "") {
+    state.error_msg = "Uzupełnij wszystkie wymagane pola";
     return false;
   }
   if (day.length < 2) day = `0${day}`;
   if (month.length < 2) month = `0${month}`;
-  if (day.length > 2 || month.length > 2 || (year !== '' && year.length !== 4)) {
-    state.error_msg = 'Niepoprawny format daty';
+  if (
+    day.length > 2 ||
+    month.length > 2 ||
+    (year !== "" && year.length !== 4)
+  ) {
+    state.error_msg = "Niepoprawny format daty";
     return false;
   }
   if (isRealDate(year, month, day) === false) {
-    state.error_msg = 'Niepoprawna data';
+    state.error_msg = "Niepoprawna data";
     return false;
   }
-  if (year !== '' && (year[0] !== '2' || year[1] !== '0')) {
-    state.error_msg = 'Niepoprawne stulecie';
+  if (year !== "" && (year[0] !== "2" || year[1] !== "0")) {
+    state.error_msg = "Niepoprawne stulecie";
     return false;
   }
-  state.error_msg = '';
+  state.error_msg = "";
   return true;
-}
+};
 
 const update = () => {
   const { data } = props;
-  const id = data._id;
+  const id = data.id;
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
-    const sanitizedEvent = state.date.event.replace(/[<>]/g, '').trim();
+    const sanitizedEvent = state.date.event.replace(/[<>]/g, "").trim();
     const payload = {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
-      month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
-      year: '',
+      month:
+        state.date.month.length === 2
+          ? state.date.month
+          : `0${state.date.month}`,
+      year: "",
       event: sanitizedEvent,
     };
-    if (state.date.year !== '') payload.year = state.date.year;
-    datesStore.updateDate({ id, payload });
-    emit('closeModal');
+    if (state.date.year !== "") payload.year = state.date.year;
+    datesStore.updateDate({ id, ...payload });
+    emit("closeModal");
   } else {
     state.error = true;
   }
-}
+};
 
 const send = () => {
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
-    const sanitizedEvent = state.date.event.replace(/[<>]/g, '').trim();
+    const sanitizedEvent = state.date.event.replace(/[<>]/g, "").trim();
     const payload = {
       day: state.date.day.length === 2 ? state.date.day : `0${state.date.day}`,
-      month: state.date.month.length === 2 ? state.date.month : `0${state.date.month}`,
-      year: '',
+      month:
+        state.date.month.length === 2
+          ? state.date.month
+          : `0${state.date.month}`,
+      year: "",
       event: sanitizedEvent,
     };
-    if (state.date.year !== '') payload.year = state.date.year;
+    if (state.date.year !== "") payload.year = state.date.year;
     datesStore.postDate(payload);
-    emit('closeModal');
+    emit("closeModal");
   } else {
     state.error = true;
   }
-}
+};
 
 const remove = () => {
   const { data } = props;
-  const id = data._id;
+  const id = data.id;
   datesStore.deleteDate(id);
-  emit('closeModal');
-}
+  emit("closeModal");
+};
 
 const detectKey = (e: any) => {
-  if (e.keyCode === 13 && props.type === 'add') {
+  if (e.keyCode === 13 && props.type === "add") {
     send();
   }
-  if (e.keyCode === 13 && props.type === 'edit') {
+  if (e.keyCode === 13 && props.type === "edit") {
     update();
   }
-}
+};
 </script>
 
 <template>
   <section class="modal-box">
-    <div
-      class="modal-mask"
-      @click="$emit('closeModal')"
-    />
-    <section
-      class="modal-proper"
-      @keydown="detectKey"
-    >
+    <div class="modal-mask" @click="$emit('closeModal')" />
+    <section class="modal-proper" @keydown="detectKey">
       <header v-if="type === 'add'">Dodaj</header>
       <header v-if="type === 'edit'">Edytuj</header>
-      <input
-        v-model="state.date.day"
-        placeholder="DD"
-        spellcheck="false"
-      >
-      <input
-        v-model="state.date.month"
-        placeholder="MM"
-        spellcheck="false"
-      >
+      <input v-model="state.date.day" placeholder="DD" spellcheck="false" />
+      <input v-model="state.date.month" placeholder="MM" spellcheck="false" />
       <input
         v-model="state.date.year"
         placeholder="RRRR (opcjonalne)"
         spellcheck="false"
-      >
+      />
       <input
         v-model="state.date.event"
         placeholder="Wydarzenie"
         spellcheck="false"
-      >
-      <p :class="{'error': true, 'open': state.error}">
+      />
+      <p :class="{ error: true, open: state.error }">
         {{ state.error_msg }}
       </p>
       <footer>
-        <button v-if="type === 'add'" @click="send">
-          Stwórz
-        </button>
-        <button v-if="type === 'edit'" @click="update">
-          Zmień
-        </button>
-        <button @click="$emit('closeModal')">
-          Anuluj
-        </button>
-        <button v-if="type === 'edit'" @click="remove">
-          Usuń
-        </button>
+        <button v-if="type === 'add'" @click="send">Stwórz</button>
+        <button v-if="type === 'edit'" @click="update">Zmień</button>
+        <button @click="$emit('closeModal')">Anuluj</button>
+        <button v-if="type === 'edit'" @click="remove">Usuń</button>
       </footer>
     </section>
   </section>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 
 @keyframes moduleUpFadeIn {
   0% {
@@ -286,4 +273,3 @@ const detectKey = (e: any) => {
   }
 }
 </style>
-  

@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
-import { RouterLink } from 'vue-router';
-import MenuIcon from '@/assets/svg/MenuIcon.vue';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
-
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+import { reactive } from "vue";
+import { RouterLink } from "vue-router";
+import MenuIcon from "@/assets/svg/MenuIcon.vue";
 
 const state = reactive({
   open: false,
@@ -14,26 +9,25 @@ const state = reactive({
 
 const openMenu = () => {
   state.open = true;
-}
+};
 
 const closeMenu = () => {
   state.open = false;
-}
-
+};
 </script>
 
 <template>
   <button class="menu-bar" @click="openMenu">
     <MenuIcon />
   </button>
-  <nav class='menu-mobile' :class="{'open': state.open}" @click="closeMenu">
-    <RouterLink v-if="user.role === 'admin'" to="/calendar">Kalendarz</RouterLink>
+  <nav class="menu-mobile" :class="{ open: state.open }" @click="closeMenu">
+    <RouterLink to="/calendar">Kalendarz</RouterLink>
     <RouterLink to="/events">Daty</RouterLink>
   </nav>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 .menu-bar {
   display: flex;
   justify-content: center;
@@ -89,7 +83,8 @@ a {
 }
 
 @media only screen and (min-width: 768px) {
-  .menu-mobile, .menu-bar {
+  .menu-mobile,
+  .menu-bar {
     display: none;
   }
 }

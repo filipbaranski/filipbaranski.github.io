@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
-import DesktopMenuComponent from '@/components/DesktopMenuComponent.vue';
-import MobileMenuComponent from '@/components/MobileMenuComponent.vue';
-
-const authStore = useAuthStore();
-const { isAuthenticated } = storeToRefs(authStore);
+import { RouterLink } from "vue-router";
+import DesktopMenuComponent from "@/components/DesktopMenuComponent.vue";
+import MobileMenuComponent from "@/components/MobileMenuComponent.vue";
 </script>
 
 <template>
@@ -15,15 +10,15 @@ const { isAuthenticated } = storeToRefs(authStore);
       <p class="banner">Tea Hub</p>
     </RouterLink>
   </header>
-  <DesktopMenuComponent v-if="isAuthenticated" />
-  <MobileMenuComponent v-if="isAuthenticated" />
+  <DesktopMenuComponent />
+  <MobileMenuComponent />
   <section class="innerBorder">
     <slot />
   </section>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 .header {
   height: 75px;
   width: 100%;
@@ -61,5 +56,4 @@ a {
     min-height: calc(100vh - 190px);
   }
 }
-
 </style>

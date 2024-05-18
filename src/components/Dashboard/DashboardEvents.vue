@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
-import { computed } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useDatesStore } from '@/stores/dates';
+import { RouterLink } from "vue-router";
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useDatesStore } from "@/stores/dates";
 
 const datesStore = useDatesStore();
 
-const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
+const { dates } = storeToRefs(datesStore);
 
 const daysInAdvance = 7;
 
@@ -30,10 +30,14 @@ const upcomingEvents = computed(() => {
     const eventDate = new Date(eventYear, eventMonth, eventDay);
     const eventTime = eventDate.getTime();
     const timesDifference = eventTime - currentTime;
-    const timeOffsetDiff = eventDate.getTimezoneOffset() - currentDate.getTimezoneOffset();
+    const timeOffsetDiff =
+      eventDate.getTimezoneOffset() - currentDate.getTimezoneOffset();
     const timeOffsetDiffMs = timeOffsetDiff * 60 * 1000;
     const finalTimesDifference = timesDifference - timeOffsetDiffMs;
-    if (finalTimesDifference <= timeInAdvance && finalTimesDifference > -1 * msInDay) {
+    if (
+      finalTimesDifference <= timeInAdvance &&
+      finalTimesDifference > -1 * msInDay
+    ) {
       const daysLeft = Math.round(finalTimesDifference / msInDay);
       displayedEvents.push({ ...date, daysLeft });
     }
@@ -43,30 +47,25 @@ const upcomingEvents = computed(() => {
 
 const eventFilter = (daysLeft: any) => {
   const events = upcomingEvents;
-  const filteredEvents = events.value.filter((event: any) => event.daysLeft === daysLeft);
+  const filteredEvents = events.value.filter(
+    (event: any) => event.daysLeft === daysLeft
+  );
   return filteredEvents;
-}
+};
 </script>
 
 <template>
   <section class="dates-container">
     <RouterLink class="dates-link" to="/events">
       <div v-if="upcomingEvents.length !== 0" class="dates">
-        <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
         <section v-for="n in daysInAdvance + 1" :key="n">
           <div v-if="eventFilter(n - 1).length !== 0" class="dates-block">
-            <p v-if="n - 1 === 0" class="dates-heading">
-              Dzisiaj
-            </p>
-            <p v-if="n - 1 === 1" class="dates-heading">
-              Jutro
-            </p>
-            <p v-if="(n - 1 > 1) && (n - 1 !== 7)" class="dates-heading">
+            <p v-if="n - 1 === 0" class="dates-heading">Dzisiaj</p>
+            <p v-if="n - 1 === 1" class="dates-heading">Jutro</p>
+            <p v-if="n - 1 > 1 && n - 1 !== 7" class="dates-heading">
               {{ `Za ${n - 1} dni` }}
             </p>
-            <p v-if="n - 1 === 7" class="dates-heading">
-              Za tydzień
-            </p>
+            <p v-if="n - 1 === 7" class="dates-heading">Za tydzień</p>
             <span v-for="event in eventFilter(n - 1)" :key="event.id">
               <p class="dates-date">{{ event.event }}</p>
             </span>
@@ -74,9 +73,10 @@ const eventFilter = (daysLeft: any) => {
         </section>
       </div>
       <div v-if="upcomingEvents.length === 0" class="dates">
-        <div v-if="datesLoading === true || datesDateUpdating.length !== 0" class="dates-loader"/>
         <div class="dates-block">
-          <p class="dates-placeholder">Brak nadchodzących wydarzeń w najbliżych siedmiu dniach</p>
+          <p class="dates-placeholder">
+            Brak nadchodzących wydarzeń w najbliżych siedmiu dniach
+          </p>
         </div>
       </div>
     </RouterLink>
@@ -84,16 +84,7 @@ const eventFilter = (daysLeft: any) => {
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
-
-@keyframes rotateLoader {
-  0% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
+@import "@/styles/global.scss";
 
 .dates {
   max-height: 50vh;
@@ -139,21 +130,6 @@ const eventFilter = (daysLeft: any) => {
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  &-loader {
-    position: absolute;
-    bottom: 0;
-    right: 10px;
-    height: 20px;
-    width: 20px;
-    border-radius: $full-border-radius;
-    border-top: 3px solid $border-green;
-    border-bottom: 3px solid $border-green;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    z-index: 10000;
-    animation: rotateLoader 1s linear infinite;
   }
 }
 

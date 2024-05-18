@@ -1,25 +1,9 @@
-<script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useDatesStore } from '@/stores/dates';
-
-const datesStore = useDatesStore();
-
-const { datesDateUpdating, datesLoading } = storeToRefs(datesStore);
-</script>
-
 <template>
-  <div
-    :class="{
-      'button': true,
-      'loading': datesDateUpdating.length !== 0 || datesLoading
-    }"
-  >
-    +
-  </div>
+  <div class="button">+</div>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 
 .button {
   position: fixed;
@@ -37,11 +21,6 @@ const { datesDateUpdating, datesLoading } = storeToRefs(datesStore);
   box-shadow: $box-shadow;
   z-index: 8;
   cursor: pointer;
-
-  &.loading {
-    background-color: $pale-grey;
-    cursor: default;
-  }
 
   &:hover {
     background-color: $pale-green;

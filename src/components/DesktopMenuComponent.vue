@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '@/stores/auth';
-
-const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
+import { RouterLink } from "vue-router";
 </script>
 
 <template>
   <nav class="menu-desktop">
-    <RouterLink v-if="user.role === 'admin'" to="/calendar">Kalendarz</RouterLink>
+    <RouterLink to="/calendar">Kalendarz</RouterLink>
     <RouterLink to="/events">Daty</RouterLink>
   </nav>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 
 .menu-desktop {
   display: none;
@@ -44,15 +39,15 @@ const { user } = storeToRefs(authStore);
     background-color: $white;
 
     &:hover {
-        border-bottom: 3px solid $border-green;
+      border-bottom: 3px solid $border-green;
     }
 
     &.router-link-active {
-        border-bottom: 3px solid $border-green;
-        background-color: $white;
-        border-left: none;
-        text-shadow: none;
-        color: $black;
+      border-bottom: 3px solid $border-green;
+      background-color: $white;
+      border-left: none;
+      text-shadow: none;
+      color: $black;
     }
   }
 }
