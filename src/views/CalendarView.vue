@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar';
-import CalendarModal from '@/components/CalendarModal.vue';
-import Cube from '@/assets/svg/Cube.svg';
-import CubeWhite from '@/assets/svg/CubeWhite.svg';
+import { computed, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { useCalendarStore } from "@/stores/calendar";
+import CalendarModal from "@/components/CalendarModal.vue";
+import Cube from "@/assets/svg/Cube.svg";
+import CubeWhite from "@/assets/svg/CubeWhite.svg";
 
 const calendarStore = useCalendarStore();
-const { calendar, calendarDaysUpdating, calendarLoading } = storeToRefs(calendarStore);
+const { calendar } = storeToRefs(calendarStore);
 
 const currentDate = new Date();
 
@@ -35,17 +35,16 @@ const daysInMonth = computed(() => {
 });
 
 const openEditModal = (day: number) => {
-  if ((day <= state.currentDay
-    || state.month !== state.currentDate.getMonth()
-    || state.year !== state.currentDate.getFullYear())
-    && calendarStore.calendarLoading === false
-    && calendarStore.calendarDaysUpdating.length === 0) {
-    const { _id, red, is_cube } = calendarStore.calendar;
+  if (
+    day <= state.currentDay ||
+    state.month !== state.currentDate.getMonth() ||
+    state.year !== state.currentDate.getFullYear()
+  ) {
+    const { red, is_cube } = calendarStore.calendar;
     const data = {
-      date: `${day >= 10
-        ? day : `0${day}`}.${state.month >= 9 ? state.month + 1
-        : `0${state.month + 1}`}.${state.year}`,
-      id: _id,
+      date: `${day >= 10 ? day : `0${day}`}.${
+        state.month >= 9 ? state.month + 1 : `0${state.month + 1}`
+      }.${state.year}`,
       day,
       month: state.month,
       year: state.year,
@@ -55,50 +54,12 @@ const openEditModal = (day: number) => {
     state.editedData = data;
     state.editModalOpen = true;
   }
-}
+};
 
 const closeEditModal = () => {
   state.editModalOpen = false;
   state.editedData = {};
-}
-
-const loadMonth = async (direction: any) => {
-  const isOnline = window.navigator.onLine;
-  if (isOnline) {
-    if (direction === 'previous' && state.month === 0) {
-      const response = await calendarStore.getMonth({ year: state.year - 1, month: 12 });
-      if (response === true) {
-        state.month = 11;
-        state.year -= 1;
-        return;
-      }
-      return;
-    }
-    if (direction === 'previous' && state.month !== 0) {
-      const response = await calendarStore.getMonth({ year: state.year, month: state.month });
-      if (response === true) {
-        state.month -= 1;
-        return;
-      }
-      return;
-    }
-    if (direction === 'next' && state.month === 11) {
-      const response = await calendarStore.getMonth({ year: state.year + 1, month: 1 });
-      if (response === true) {
-        state.month = 0;
-        state.year += 1;
-        return;
-      }
-      return;
-    }
-    if (direction === 'next' && state.month !== 11) {
-      const response = await calendarStore.getMonth({ year: state.year, month: state.month + 2 });
-      if (response === true) {
-        state.month += 1;
-      }
-    }
-  }
-}
+};
 </script>
 
 <template>
@@ -109,41 +70,15 @@ const loadMonth = async (direction: any) => {
       @closeModal="closeEditModal"
     />
     <nav>
-      <button
-        :disabled="(state.year === 2024 && state.month === 0)
-          || calendarLoading
-          || calendarDaysUpdating.length !== 0"
-        @click="loadMonth('previous')"
-      >
-        Poprzedni
-      </button>
       <h2>
         {{
-          `${new Date(state.year, state.month, 1)
-            .toLocaleString('default', { month: 'long' })} ${state.year}`
+          `${new Date(state.year, state.month, 1).toLocaleString("default", {
+            month: "long",
+          })} ${state.year}`
         }}
       </h2>
-      <button
-        :disabled="(state.year === currentDate.getFullYear() && state.month === currentDate.getMonth())
-          || calendarLoading
-          || calendarDaysUpdating.length !== 0"
-        @click="loadMonth('next')"
-      >
-        Następny
-      </button>
     </nav>
-    <main
-      v-if="calendar.year && calendarDaysUpdating !== null"
-      class="calendar-proper"
-    >
-      <div
-        v-if="calendarLoading || calendarDaysUpdating.length !== 0"
-        class="calendar-loader"
-      />
-      <div
-        v-if="calendarLoading || calendarDaysUpdating.length !== 0"
-        class="calendar-mask"
-      />
+    <main class="calendar-proper">
       <div
         v-for="day of emptyDays"
         :key="`empty-${day}`"
@@ -155,36 +90,39 @@ const loadMonth = async (direction: any) => {
         :class="{
           'calendar-day': true,
           'calendar-day-filled': true,
-          'red': calendar.red.indexOf(day) !== -1,
-          'weekend': 
+          red: calendar.red.indexOf(day) !== -1,
+          weekend:
             (day + firstDayOfSelectedMonth.getDay()) % 7 === 0 ||
             (day + firstDayOfSelectedMonth.getDay()) % 7 === 1,
-          'blocked':
+          blocked:
             day > state.currentDay &&
             state.month === currentDate.getMonth() &&
             state.year === currentDate.getFullYear(),
-            'current': day === state.currentDay &&
+          current:
+            day === state.currentDay &&
             state.month === currentDate.getMonth() &&
-            state.year === currentDate.getFullYear()
+            state.year === currentDate.getFullYear(),
         }"
         @click="openEditModal(day)"
       >
         <p
-          v-if="day > state.currentDay &&
+          v-if="
+            day > state.currentDay &&
             state.month === currentDate.getMonth() &&
-            state.year === currentDate.getFullYear()"
+            state.year === currentDate.getFullYear()
+          "
         >
           {{ day }}
         </p>
         <div
-          v-if="day <= state.currentDay ||
+          v-if="
+            day <= state.currentDay ||
             state.month !== currentDate.getMonth() ||
-            state.year !== currentDate.getFullYear()"
+            state.year !== currentDate.getFullYear()
+          "
           class="calendar-day-footer"
         >
-          <img
-            :src="calendar.is_cube.indexOf(day) === -1 ? Cube : CubeWhite"
-          >
+          <img :src="calendar.is_cube.indexOf(day) === -1 ? Cube : CubeWhite" />
         </div>
       </div>
     </main>
@@ -192,20 +130,11 @@ const loadMonth = async (direction: any) => {
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
-
-@keyframes rotateLoader {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
+@import "@/styles/global.scss";
 
 nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 600px;
@@ -215,60 +144,12 @@ nav {
     text-align: center;
     font-size: 14px;
   }
-
-  button {
-    border: 2px solid $border-green;
-    outline: none;
-    background-color: transparent;
-    padding: 5px 10px;
-    border-radius: $standard-border-radius;
-    font-size: 12px;
-
-    &:hover {
-      cursor: pointer;
-      background-color: $pale-green;
-    }
-
-    &:disabled {
-      border: 2px solid $pale-grey;
-      background-color: $white;
-      cursor: default;
-    }
-  }
 }
 
 .calendar {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  &-mask {
-    position: absolute;
-    top: -5px;
-    width: calc(100% + 10px);
-    height: calc(100% + 10px);
-    background-color: $white;
-    z-index: 1000;
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  &-loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: 10px;
-    height: 20px;
-    width: 20px;
-    border-radius: $full-border-radius;
-    border-top: 3px solid $border-green;
-    border-bottom: 3px solid $border-green;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    z-index: 10000;
-    animation: rotateLoader 1s linear infinite;
-    cursor: default;
-  }
 
   &-proper {
     position: relative;
@@ -300,8 +181,11 @@ nav {
     }
 
     &-filled {
-      background: -webkit-linear-gradient(225deg, rgba(153,204,51,0.8) 0%,
-        rgba(153,204,51,1) 60%);
+      background: -webkit-linear-gradient(
+        225deg,
+        rgba(153, 204, 51, 0.8) 0%,
+        rgba(153, 204, 51, 1) 60%
+      );
 
       &:hover {
         cursor: pointer;
@@ -310,15 +194,20 @@ nav {
       }
 
       &.red {
-        background: -webkit-linear-gradient(225deg, #B90E0AA0 0%,
-            #B90E0ADA 60%);
+        background: -webkit-linear-gradient(
+          225deg,
+          #b90e0aa0 0%,
+          #b90e0ada 60%
+        );
       }
 
       &.blocked {
         cursor: default;
         color: $black;
         background: $palest-grey;
-        &:hover { opacity: 1; }
+        &:hover {
+          opacity: 1;
+        }
       }
 
       &.current {
@@ -351,11 +240,6 @@ nav {
     h2 {
       font-size: 20px;
     }
-
-    button {
-      padding: 10px 20px;
-      font-size: 14px;
-    }
   }
 
   .calendar {
@@ -364,5 +248,4 @@ nav {
     }
   }
 }
-
 </style>

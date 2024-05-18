@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive, onUpdated, onMounted } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useDatesStore } from '@/stores/dates';
-import AddButton from '@/components/Events/AddButton.vue';
-import EventsModal from '@/components/Events/EventsModal.vue';
+import { computed, reactive, onUpdated, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useDatesStore } from "@/stores/dates";
+import AddButton from "@/components/Events/AddButton.vue";
+import EventsModal from "@/components/Events/EventsModal.vue";
 
 const datesStore = useDatesStore();
 
-const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
+const { dates } = storeToRefs(datesStore);
 
 const state = reactive({
   addModalOpen: false,
@@ -44,69 +44,64 @@ const compare = (a: any, b: any) => {
   if (`${b.month}${b.day}` > `${a.month}${a.day}`) return -1;
 
   return 0;
-}
+};
 
 const compareWithYear = (a: any, b: any) => {
   if (`${a.year}${a.month}${a.day}` > `${b.year}${b.month}${b.day}`) return 1;
   if (`${b.year}${b.month}${b.day}` > `${a.year}${a.month}${a.day}`) return -1;
 
   return 0;
-}
+};
 
 const openModal = () => {
-  if (datesDateUpdating.value.length === 0 && !datesLoading.value) {
-    state.addModalOpen = true;
-  }
-}
+  state.addModalOpen = true;
+};
 
 const closeModal = () => {
   state.addModalOpen = false;
-}
+};
 
 const openEditModal = (data: any) => {
-  if (datesLoading.value === false && datesDateUpdating.value.indexOf(data._id) === -1) {
-    state.editedData = data;
-    state.editModalOpen = true;
-  }
-}
+  state.editedData = data;
+  state.editModalOpen = true;
+};
 
 const closeEditModal = () => {
   state.editModalOpen = false;
-}
+};
 
 const toggle = (e: any, data: any) => {
   switch (data) {
-    case 'yearlyOpen': {
+    case "yearlyOpen": {
       state.yearlyOpen = !state.yearlyOpen;
       break;
     }
-    case 'eventsOpen': {
+    case "eventsOpen": {
       state.eventsOpen = !state.eventsOpen;
       break;
     }
     default:
       break;
   }
-}
+};
 
 const passed = (date: any) => {
   const currentDate = new Date();
   const entryDate = new Date(date.year, date.month - 1, date.day, 23, 59, 59);
   return entryDate < currentDate;
-}
+};
 
 const getHeights = () => {
-  const eventsContent = document.getElementById('eventsModal').children[0];
+  const eventsContent = document.getElementById("eventsModal").children[0];
   const eventsHeighteight = eventsContent.clientHeight;
   state.eventsOpenHeight = eventsHeighteight;
-  const yearlyContent = document.getElementById('yearlyModal').children[0];
+  const yearlyContent = document.getElementById("yearlyModal").children[0];
   const yearlyHeighteight = yearlyContent.clientHeight;
   state.yearlyOpenHeight = yearlyHeighteight;
-}
+};
 
 onMounted(() => getHeights());
 onUpdated(() => getHeights());
-
 </script>
 
 <template>
@@ -126,7 +121,7 @@ onUpdated(() => getHeights());
       :class="{
         'date-header': true,
         'date-header-first': true,
-        'open': state.yearlyOpen
+        open: state.yearlyOpen,
       }"
       @click="(e: Event) => toggle(e, 'yearlyOpen')"
     >
@@ -136,15 +131,13 @@ onUpdated(() => getHeights());
       id="yearlyModal"
       :class="{
         'date-items_container': true,
-        'closed': !state.yearlyOpen
+        closed: !state.yearlyOpen,
       }"
-      :style="{'max-height': `${state.yearlyOpenHeight + 20}px`}"
+      :style="{ 'max-height': `${state.yearlyOpenHeight + 20}px` }"
     >
-      <p
-        class="date-placeholder"
-        v-if="orderedDates.length === 0"
-      >
-        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole ekranu.
+      <p class="date-placeholder" v-if="orderedDates.length === 0">
+        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole
+        ekranu.
       </p>
       <section v-if="orderedDates.length !== 0">
         <div
@@ -152,32 +145,20 @@ onUpdated(() => getHeights());
           :key="date.id"
           :class="{
             'date-container': true,
-            'loading': datesDateUpdating.indexOf(date._id) !== -1
           }"
           @click="openEditModal(date)"
         >
-          <p class="date-format">
-            {{ date.day }}.{{ date.month }}
-          </p>
+          <p class="date-format">{{ date.day }}.{{ date.month }}</p>
           <p class="date-event">
             {{ date.event }}
           </p>
-          <div
-            v-if="(datesLoading === true && datesDateUpdating.length === 0)
-              || datesDateUpdating.indexOf(date._id) !== -1"
-            class="date-loader"
-          />
-          <div
-            v-if="datesLoading === true || datesDateUpdating.length !== 0"
-            class="date-mask"
-          />
         </div>
       </section>
     </div>
     <section
       :class="{
         'date-header': true,
-        'open': state.eventsOpen
+        open: state.eventsOpen,
       }"
       @click="(e: Event) => toggle(e, 'eventsOpen')"
     >
@@ -187,23 +168,19 @@ onUpdated(() => getHeights());
       id="eventsModal"
       :class="{
         'date-items_container': true,
-        'closed': !state.eventsOpen
+        closed: !state.eventsOpen,
       }"
-      :style="{'max-height': `${state.eventsOpenHeight + 20}px`}"
+      :style="{ 'max-height': `${state.eventsOpenHeight + 20}px` }"
     >
-      <p
-        class="date-placeholder"
-        v-if="orderedOneTimeDates.length === 0"
-      >
-        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole ekranu.
+      <p class="date-placeholder" v-if="orderedOneTimeDates.length === 0">
+        Jeszcze nic tu nie ma. Dodaj nową datę używając przysisku na dole
+        ekranu.
       </p>
       <section v-if="orderedOneTimeDates.length !== 0">
         <div
           v-for="date of orderedOneTimeDates"
           :key="date.id"
-          :class="{'date-container': true,
-                  'grey': passed(date) === true,
-                  'loading': datesDateUpdating.indexOf(date._id) !== -1}"
+          :class="{ 'date-container': true, grey: passed(date) === true }"
           @click="openEditModal(date)"
         >
           <p class="date-format">
@@ -212,15 +189,6 @@ onUpdated(() => getHeights());
           <p class="date-event">
             {{ date.event }}
           </p>
-          <div
-            v-if="(datesLoading === true && datesDateUpdating.length === 0)
-              || datesDateUpdating.indexOf(date._id) !== -1"
-            class="date-loader"
-          />
-          <div
-            v-if="datesLoading === true || datesDateUpdating.length !== 0"
-            class="date-mask"
-          />
         </div>
       </section>
     </div>
@@ -231,16 +199,7 @@ onUpdated(() => getHeights());
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
-
-@keyframes rotateLoader {
-  0% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
+@import "@/styles/global.scss";
 
 .date {
   display: flex;
@@ -249,31 +208,6 @@ onUpdated(() => getHeights());
   justify-content: center;
   align-items: center;
   width: 100%;
-
-  &-loader {
-    position: absolute;
-    top: 50%;
-    right: 5px;
-    height: 14px;
-    width: 14px;
-    border-radius: $full-border-radius;
-    border-top: 3px solid $border-green;
-    border-bottom: 3px solid $border-green;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    z-index: 10000;
-    animation: rotateLoader 1s linear infinite;
-  }
-
-  &-mask {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: $white;
-    z-index: 1000;
-    opacity: 0.5;
-    cursor: default;
-  }
 
   &-header {
     display: flex;
@@ -353,10 +287,6 @@ onUpdated(() => getHeights());
       cursor: pointer;
     }
 
-    &.loading {
-      z-index: -1;
-    }
-
     section {
       display: flex;
       justify-content: center;
@@ -420,10 +350,6 @@ onUpdated(() => getHeights());
         background-color: $pale-green;
         transition: all 0.3s;
       }
-    }
-
-    &-loader {
-      bottom: -6px;
     }
 
     &-container {

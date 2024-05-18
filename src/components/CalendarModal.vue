@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { reactive, onBeforeMount } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar';
-import { useAuthStore } from '@/stores/auth';
-import Cube from '@/assets/svg/Cube.svg';
-import CubeWhite from '@/assets/svg/CubeWhite.svg';
+import { reactive } from "vue";
+import { useCalendarStore } from "@/stores/calendar";
+import Cube from "@/assets/svg/Cube.svg";
+import CubeWhite from "@/assets/svg/CubeWhite.svg";
 
 const calendarStore = useCalendarStore();
-const { calendarDaysUpdating } = storeToRefs(calendarStore);
 
-const emit = defineEmits(['closeModal']);
+const emit = defineEmits(["closeModal"]);
 
-const props = defineProps(['data']);
+const props = defineProps(["data"]);
 
 const state = reactive({
   date: props.data.date,
-  id: props.data.id,
   day: props.data.day,
   month: props.data.month,
   year: props.data.year,
@@ -24,7 +20,7 @@ const state = reactive({
 });
 
 const update = () => {
-  const { id, day, month, year, red, is_cube } = state;
+  const { day, month, year, red, is_cube } = state;
   const payload = {
     day,
     month,
@@ -32,70 +28,40 @@ const update = () => {
     red,
     is_cube,
   };
-  calendarStore.updateCalendar({ id, payload });
-  emit('closeModal');
+  calendarStore.updateCalendar({ payload });
+  emit("closeModal");
 };
-
-onBeforeMount(() => {
-  const authStore = useAuthStore();
-  const currentDate = new Date();
-  const testString = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-  if (authStore.lastDay !== '' && authStore.lastDay !== testString) {
-    authStore.lastDay = testString;
-    window.location.reload();
-  }
-});
 </script>
 
 <template>
   <section class="modal-box">
-    <div
-      class="modal-mask"
-      @click="$emit('closeModal')"
-    />
+    <div class="modal-mask" @click="$emit('closeModal')" />
     <section class="modal-proper">
       <header>{{ state.date }}</header>
       <div class="modal-selects">
         <div class="modal-section">
-          <input
-            id="red"
-            v-model="state.red"
-            type="checkbox"
-          >
+          <input id="red" v-model="state.red" type="checkbox" />
           <label for="red">
-            <div :class="{'modal-circle': true, 'red': state.red}" />
+            <div :class="{ 'modal-circle': true, red: state.red }" />
           </label>
         </div>
         <div class="modal-section">
-          <input
-            id="cube"
-            v-model="state.is_cube"
-            type="checkbox"
-          >
+          <input id="cube" v-model="state.is_cube" type="checkbox" />
           <label for="cube">
-            <img
-              :src="state.is_cube ? CubeWhite : Cube"
-            >
+            <img :src="state.is_cube ? CubeWhite : Cube" />
           </label>
         </div>
       </div>
       <footer>
-        <button
-          :disabled="calendarDaysUpdating.length !== 0"
-          @click="update"
-        >
-          Zmień
-        </button>
-        <button @click="$emit('closeModal')">
-          Anuluj
-        </button>
+        <button @click="update">Zmień</button>
+        <button @click="$emit('closeModal')">Anuluj</button>
       </footer>
     </section>
   </section>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 
 @keyframes moduleUpFadeIn {
   0% {
@@ -155,10 +121,18 @@ onBeforeMount(() => {
     width: 34px;
     height: 34px;
     border-radius: $full-border-radius;
-    background: -webkit-linear-gradient(225deg, rgba(153,204,51,0.8) 0%, rgba(153,204,51,1) 60%);
+    background: -webkit-linear-gradient(
+      225deg,
+      rgba(153, 204, 51, 0.8) 0%,
+      rgba(153, 204, 51, 1) 60%
+    );
 
     &.red {
-      background: -webkit-linear-gradient(225deg, rgba(185,14,10,0.8) 0%, rgba(185,14,10,1) 60%);
+      background: -webkit-linear-gradient(
+        225deg,
+        rgba(185, 14, 10, 0.8) 0%,
+        rgba(185, 14, 10, 1) 60%
+      );
     }
   }
 
@@ -194,7 +168,7 @@ onBeforeMount(() => {
       width: 100%;
       min-width: 200px;
       height: 38px;
-      font-family: 'Times New Roman';
+      font-family: "Times New Roman";
       font-size: 16px;
       margin-bottom: 15px;
       border-bottom: 1px solid $border-green;

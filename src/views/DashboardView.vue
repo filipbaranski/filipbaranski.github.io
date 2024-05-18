@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar';
-import { useAuthStore } from '@/stores/auth';
-import CalendarModal from '@/components/CalendarModal.vue';
-import DashboardCalendar from '@/components/Dashboard/DashboardCalendar.vue';
-import DashboardEvents from '@/components/Dashboard/DashboardEvents.vue';
-
-const calendarStore = useCalendarStore();
-const authStore = useAuthStore();
-const { calendarLoading } = storeToRefs(calendarStore);
-const { user } = storeToRefs(authStore);
+import { reactive } from "vue";
+import CalendarModal from "@/components/CalendarModal.vue";
+import DashboardCalendar from "@/components/Dashboard/DashboardCalendar.vue";
+import DashboardEvents from "@/components/Dashboard/DashboardEvents.vue";
 
 const state = reactive({
   editModalOpen: false,
@@ -18,28 +10,14 @@ const state = reactive({
 });
 
 const openEditModal = (data: any) => {
-  if (!calendarLoading.value) {
-    state.editModalOpen = true;
-    state.editedData = data;
-  }
-}
+  state.editModalOpen = true;
+  state.editedData = data;
+};
 
 const closeEditModal = () => {
   state.editModalOpen = false;
   state.editedData = {};
-}
-
-onMounted(() => {
-  if (user.value.role === 'admin') {
-    const currentCalendar = calendarStore.calendar;
-    const date = new Date();
-    const month = Number(date.getMonth()) + 1;
-    const year = Number(date.getFullYear());
-    if (Number(currentCalendar.month) !== month || Number(currentCalendar.year) !== year) {
-      useCalendarStore().getMonth({ year, month: month });
-    }
-  }
-});
+};
 </script>
 
 <template>
@@ -50,10 +28,7 @@ onMounted(() => {
       @closeModal="closeEditModal"
     />
     <section class="dashboard-layout dashboard-bottom_container">
-      <DashboardCalendar
-        v-if="user.role === 'admin'"
-        @openModal="openEditModal"
-      />
+      <DashboardCalendar @openModal="openEditModal" />
       <DashboardEvents />
     </section>
     <div class="dashboard-background" />
@@ -61,7 +36,7 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 
 @keyframes moduleUpFadeIn {
   0% {
@@ -80,7 +55,7 @@ onMounted(() => {
   &-background {
     height: calc(100vh - 155px);
     opacity: 0.4;
-    background-image: url('../assets/icon.png');
+    background-image: url("../assets/icon.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 256px;

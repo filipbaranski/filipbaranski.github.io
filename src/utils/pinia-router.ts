@@ -1,7 +1,7 @@
-import 'pinia'
+import "pinia";
 
-declare module 'pinia' {
+declare module "pinia" {
   export interface PiniaCustomProperties {
-    router: any
+    router: any;
   }
 }

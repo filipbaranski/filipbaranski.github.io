@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useCalendarStore } from '@/stores/calendar';
-import Cube from '@/assets/svg/Cube.svg';
-import CubeWhite from '@/assets/svg/CubeWhite.svg';
+import { computed, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { useCalendarStore } from "@/stores/calendar";
+import Cube from "@/assets/svg/Cube.svg";
+import CubeWhite from "@/assets/svg/CubeWhite.svg";
 
 const calendarStore = useCalendarStore();
-const { calendar, calendarLoading, calendarDaysUpdating } = storeToRefs(calendarStore);
+const { calendar } = storeToRefs(calendarStore);
 
 const currentDate = new Date();
 
@@ -17,13 +17,12 @@ const state = reactive({
 });
 
 const editedData = computed(() => {
-  const { _id, red, is_cube } = calendar.value;
+  const { red, is_cube } = calendar.value;
   const day = state.currentDay;
   const data = {
-    date: `${day >= 10
-      ? day : `0${day}`}.${state.month >= 9 ? state.month + 1
-      : `0${state.month + 1}`}.${state.year}`,
-    id: _id,
+    date: `${day >= 10 ? day : `0${day}`}.${
+      state.month >= 9 ? state.month + 1 : `0${state.month + 1}`
+    }.${state.year}`,
     day,
     month: state.month,
     year: state.year,
@@ -36,36 +35,27 @@ const editedData = computed(() => {
 
 <template>
   <section
-    v-if="calendar.year && calendarDaysUpdating !== null"
     class="calendar_day-container"
     @click="$emit('openModal', editedData)"
   >
-    <div
-      v-if="calendarLoading || calendarDaysUpdating.indexOf(state.currentDay) !== -1"
-      class="calendar_day-loader"
-    />
-    <div
-      v-if="calendarLoading || calendarDaysUpdating.indexOf(state.currentDay) !== -1"
-      class="calendar_day-mask"
-    />
     <div class="calendar_day">
-      <div :class="{'calendar_day-circle': true, 'red': calendar.red.indexOf(state.currentDay) !== -1}"/>
-      <img :src="calendar.is_cube.indexOf(state.currentDay) === -1 ? Cube : CubeWhite">
+      <div
+        :class="{
+          'calendar_day-circle': true,
+          red: calendar.red.indexOf(state.currentDay) !== -1,
+        }"
+      />
+      <img
+        :src="
+          calendar.is_cube.indexOf(state.currentDay) === -1 ? Cube : CubeWhite
+        "
+      />
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
-@import '@/styles/global.scss';
-
-@keyframes rotateLoader {
-  0% {
-    transform: translateY(-50%) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(360deg);
-  }
-}
+@import "@/styles/global.scss";
 
 .calendar_day {
   padding: 5px;
@@ -90,10 +80,18 @@ const editedData = computed(() => {
     width: 24px;
     height: 24px;
     border-radius: $full-border-radius;
-    background: -webkit-linear-gradient(225deg, rgba(153,204,51,0.8) 0%, rgba(153,204,51,1) 60%);
+    background: -webkit-linear-gradient(
+      225deg,
+      rgba(153, 204, 51, 0.8) 0%,
+      rgba(153, 204, 51, 1) 60%
+    );
 
     &.red {
-      background: -webkit-linear-gradient(225deg, rgba(185,14,10,0.8) 0%, rgba(185,14,10,1) 60%);
+      background: -webkit-linear-gradient(
+        225deg,
+        rgba(185, 14, 10, 0.8) 0%,
+        rgba(185, 14, 10, 1) 60%
+      );
     }
   }
 
@@ -104,31 +102,6 @@ const editedData = computed(() => {
   p {
     width: 27px;
     font-weight: 600;
-  }
-
-  &-mask {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: $white;
-    z-index: 1000;
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  &-loader {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    height: 20px;
-    width: 20px;
-    border-radius: $full-border-radius;
-    border-top: 3px solid $border-green;
-    border-bottom: 3px solid $border-green;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    z-index: 10000;
-    animation: rotateLoader 1s linear infinite;
   }
 }
 
@@ -142,4 +115,3 @@ const editedData = computed(() => {
   }
 }
 </style>
-  
