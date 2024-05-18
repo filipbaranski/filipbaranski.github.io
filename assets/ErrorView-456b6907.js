@@ -1,0 +1,1 @@
+import{_ as o,o as s,a as t,p as _,j as c,b as a}from"./index-bf1b5b9c.js";const r={},n=e=>(_("data-v-30a17e54"),e=e(),c(),e),d={class:"error"},p=n(()=>a("p",{class:"errorText"},"404",-1)),i=[p];function l(e,f){return s(),t("section",d,i)}const u=o(r,[["render",l],["__scopeId","data-v-30a17e54"]]);export{u as default};
