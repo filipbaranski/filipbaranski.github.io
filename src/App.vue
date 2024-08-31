@@ -4,6 +4,7 @@ import { RouterView } from "vue-router";
 import MainLayout from "./layouts/MainLayout.vue";
 import { useCalendarStore } from "@/stores/calendar";
 import { useDatesStore } from "@/stores/dates";
+import { useWeeklyStore } from "@/stores/weekly";
 
 onMounted(() => {
   const date = new Date();
@@ -12,6 +13,7 @@ onMounted(() => {
     month: date.getMonth() + 1,
   });
   useDatesStore().getDates();
+  useWeeklyStore().getWeekly();
 });
 </script>
 
