@@ -14,4 +14,18 @@ const setStoredDates = (data: any) => {
   localStorage.setItem("dates", data);
 };
 
-export { getStoredCalendar, setStoredCalendar, getStoredDates, setStoredDates };
+const getStoredWeekly = () => {
+  return localStorage.getItem("weekly");
+};
+
+const setStoredWeekly = (data: any) => {
+  localStorage.setItem("weekly", data);
+};
+export {
+  getStoredCalendar,
+  setStoredCalendar,
+  getStoredDates,
+  setStoredDates,
+  getStoredWeekly,
+  setStoredWeekly,
+};

@@ -3,10 +3,13 @@ import { RouterLink } from "vue-router";
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useDatesStore } from "@/stores/dates";
+import { useWeeklyStore } from "@/stores/weekly";
 
 const datesStore = useDatesStore();
+const weeklyStore = useWeeklyStore();
 
 const { dates } = storeToRefs(datesStore);
+const { weekly } = storeToRefs(weeklyStore);
 
 const daysInAdvance = 7;
 
@@ -18,6 +21,7 @@ const upcomingEvents = computed(() => {
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
   const currentDate = new Date(currentYear, currentMonth, today.getDate());
+  const currentDay = today.getDay();
   const currentTime = currentDate.getTime();
   dates.value.forEach((date: any) => {
     const eventDay = parseInt(date.day, 10);
@@ -41,6 +45,12 @@ const upcomingEvents = computed(() => {
       const daysLeft = Math.round(finalTimesDifference / msInDay);
       displayedEvents.push({ ...date, daysLeft });
     }
+  });
+  weekly.value.forEach((item) => {
+    let dayNumber = parseInt(item.dayNumber) + 1;
+    if (dayNumber === 7) dayNumber = 0;
+    let daysLeft = (currentDay + dayNumber + 2) % 7;
+    displayedEvents.push({ ...item, daysLeft });
   });
   return displayedEvents;
 });
