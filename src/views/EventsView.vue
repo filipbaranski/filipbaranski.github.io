@@ -257,7 +257,7 @@ onUpdated(() => getHeights());
             }"
             @click="openWeeklyEditModal(weekly)"
           >
-            <p class="date-format">{{ days[weekly.dayNumber] }}</p>
+            <p class="date-format-name">{{ days[weekly.dayNumber] }}</p>
             <p class="date-event">
               {{ weekly.event }}
             </p>
@@ -456,6 +456,20 @@ onUpdated(() => getHeights());
     padding: 0 5px;
     position: absolute;
     width: 65px;
+
+    &-name {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $white;
+      height: 100%;
+      background-color: $border-green;
+      padding: 0 5px;
+      position: absolute;
+      width: 65px;
+      font-size: 12px;
+    }
   }
 
   &-event {
