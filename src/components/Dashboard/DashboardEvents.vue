@@ -50,7 +50,7 @@ const upcomingEvents = computed(() => {
     let dayNumber = parseInt(item.dayNumber) + 1;
     if (dayNumber === 7) dayNumber = 0;
     let daysLeft;
-    if (currentDay < dayNumber) daysLeft = dayNumber - currentDay;
+    if (currentDay <= dayNumber) daysLeft = dayNumber - currentDay;
     if (currentDay > dayNumber) daysLeft = 7 - currentDay + dayNumber;
     displayedEvents.push({ ...item, daysLeft });
   });
