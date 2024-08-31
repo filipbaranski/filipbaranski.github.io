@@ -468,7 +468,7 @@ onUpdated(() => getHeights());
       padding: 0 5px;
       position: absolute;
       width: 65px;
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 
