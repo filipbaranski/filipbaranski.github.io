@@ -10,7 +10,7 @@ const emit = defineEmits(["closeModal"]);
 
 const state = reactive({
   date: {
-    dayNumber: 0,
+    dayNumber: parseInt(props.data?.dayNumber) || 0,
     event: props.data?.event || "",
   },
   error: false,

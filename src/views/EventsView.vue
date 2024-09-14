@@ -39,7 +39,6 @@ const state = reactive({
 });
 
 const orderedWeekly = computed(() => {
-  console.log(weekly.value);
   if (weekly.value.length !== 0) {
     const data = weekly.value;
     const result = data.sort(compareWeekly);
