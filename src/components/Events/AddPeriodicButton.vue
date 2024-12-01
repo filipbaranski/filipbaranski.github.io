@@ -36,22 +36,17 @@ const isAnyDataFetching = computed(() => {
 @import "@/styles/global.scss";
 
 .button {
-  position: fixed;
-  outline: none;
-  border: none;
-  bottom: 10px;
-  right: 30px;
-  width: 45px;
-  height: 45px;
-  border-radius: $full-border-radius;
-  background-color: $border-green;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  margin: 10px auto;
   font-size: 26px;
   color: $white;
-  box-shadow: $box-shadow;
-  z-index: 8;
+  border: none;
+  border-radius: $standard-border-radius;
+  background-color: $border-green;
+  width: calc(100% - 20px);
+  height: 30px;
   cursor: pointer;
 
   &.loading {
@@ -61,18 +56,6 @@ const isAnyDataFetching = computed(() => {
 
   &:hover {
     background-color: $pale-green;
-  }
-}
-
-@media only screen and (min-width: 1024px) {
-  .button {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 45px;
-    height: 45px;
-    border-radius: $full-border-radius;
-    background-color: $border-green;
   }
 }
 </style>

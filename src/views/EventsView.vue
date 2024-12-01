@@ -2,16 +2,19 @@
 import { computed, reactive, onUpdated, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useDatesStore } from "@/stores/dates";
-import { useWeeklyStore } from "@/stores/weekly";
+import { usePeriodicStore } from "@/stores/periodic";
+import MainLayout from "@/layouts/MainLayout.vue";
 import AddButton from "@/components/Events/AddButton.vue";
+import AddPeriodicButton from "@/components/Events/AddPeriodicButton.vue";
 import EventsModal from "@/components/Events/EventsModal.vue";
-import WeeklyModal from "@/components/Events/WeeklyModal.vue";
+import PeriodicModal from "@/components/Events/PeriodicModal.vue";
 
 const datesStore = useDatesStore();
-const weeklyStore = useWeeklyStore();
+const periodicStore = usePeriodicStore();
 
-const { dates } = storeToRefs(datesStore);
-const { weekly } = storeToRefs(weeklyStore);
+const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
+const { periodic, periodicDateUpdating, periodicLoading } =
+  storeToRefs(periodicStore);
 
 const days = [
   "Poniedziałek",
@@ -23,25 +26,41 @@ const days = [
   "Niedziela",
 ];
 
+const isAnyDataFetching = computed(() => {
+  return (
+    datesLoading.value === true ||
+    datesDateUpdating.value.length !== 0 ||
+    periodicLoading.value === true ||
+    periodicDateUpdating.value.length !== 0
+  );
+});
+
+const isAnyDataUpdating = computed(() => {
+  return (
+    (datesLoading.value === true && datesDateUpdating.value.length === 0) ||
+    (periodicLoading.value === true && periodicDateUpdating.value.length === 0)
+  );
+});
+
 const state = reactive({
   addModalOpen: false,
   editModalOpen: false,
-  addWeeklyOpen: false,
-  editWeeklyOpen: false,
+  addPeriodicOpen: false,
+  editPeriodicOpen: false,
   editedData: {},
-  editedWeekly: {},
+  editedPeriodic: {},
   yearlyOpen: false,
   yearlyOpenHeight: 0,
-  weeklyOpen: false,
-  weeklyOpenHeight: 0,
+  periodicOpen: false,
+  periodicOpenHeight: 0,
   eventsOpen: true,
   eventsOpenHeight: 0,
 });
 
-const orderedWeekly = computed(() => {
-  if (weekly.value.length !== 0) {
-    const data = weekly.value;
-    const result = data.sort(compareWeekly);
+const orderedPeriodic = computed(() => {
+  if (periodic.value.length !== 0) {
+    const data = periodic.value;
+    const result = data.sort(comparePeriodic);
     return result;
   }
   return [];
@@ -81,7 +100,7 @@ const compareWithYear = (a: any, b: any) => {
   return 0;
 };
 
-const compareWeekly = (a: any, b: any) => {
+const comparePeriodic = (a: any, b: any) => {
   if (`${a.dayNumber}` > `${b.dayNumber}`) return 1;
   if (`${b.dayNumber}` > `${a.dayNumber}`) return -1;
 
@@ -105,21 +124,21 @@ const closeEditModal = () => {
   state.editModalOpen = false;
 };
 
-const openWeeklyModal = () => {
-  state.addWeeklyOpen = true;
+const openPeriodicModal = () => {
+  state.addPeriodicOpen = true;
 };
 
-const closeWeeklyModal = () => {
-  state.addWeeklyOpen = false;
+const closePeriodicModal = () => {
+  state.addPeriodicOpen = false;
 };
 
-const openWeeklyEditModal = (data: any) => {
-  state.editedWeekly = data;
-  state.editWeeklyOpen = true;
+const openPeriodicEditModal = (data: any) => {
+  state.editedPeriodic = data;
+  state.editPeriodicOpen = true;
 };
 
-const closeWeeklyEditModal = () => {
-  state.editWeeklyOpen = false;
+const closePeriodicEditModal = () => {
+  state.editPeriodicOpen = false;
 };
 
 const toggle = (e: any, data: any) => {
@@ -128,8 +147,8 @@ const toggle = (e: any, data: any) => {
       state.yearlyOpen = !state.yearlyOpen;
       break;
     }
-    case "weeklyOpen": {
-      state.weeklyOpen = !state.weeklyOpen;
+    case "periodicOpen": {
+      state.periodicOpen = !state.periodicOpen;
       break;
     }
     case "eventsOpen": {
@@ -154,10 +173,9 @@ const getHeights = () => {
   const yearlyContent = document.getElementById("yearlyDrawer").children[0];
   const yearlyHeight = yearlyContent.clientHeight;
   state.yearlyOpenHeight = yearlyHeight;
-  const weeklyContent = document.getElementById("weeklyDrawer").children[0];
-  console.log(weeklyContent);
+  const weeklyContent = document.getElementById("periodicDrawer").children[0];
   const weeklyHeight = weeklyContent.clientHeight;
-  state.weeklyOpenHeight = weeklyHeight;
+  state.periodicOpenHeight = weeklyHeight;
 };
 
 onMounted(() => getHeights());
@@ -165,150 +183,182 @@ onUpdated(() => getHeights());
 </script>
 
 <template>
-  <section class="date">
-    <EventsModal
-      v-if="state.addModalOpen"
-      type="add"
-      @closeModal="closeModal"
-    />
-    <EventsModal
-      v-if="state.editModalOpen"
-      type="edit"
-      :data="state.editedData"
-      @closeModal="closeEditModal"
-    />
-    <WeeklyModal
-      v-if="state.addWeeklyOpen"
-      type="add"
-      @closeModal="closeWeeklyModal"
-    />
-    <WeeklyModal
-      v-if="state.editWeeklyOpen"
-      type="edit"
-      :data="state.editedWeekly"
-      @closeModal="closeWeeklyEditModal"
-    />
-    <section
-      :class="{
-        'date-header': true,
-        'date-header-first': true,
-        open: state.yearlyOpen,
-      }"
-      @click="(e: Event) => toggle(e, 'yearlyOpen')"
-    >
-      <p>Coroczne</p>
-    </section>
-    <div
-      id="yearlyDrawer"
-      :class="{
-        'date-items_container': true,
-        closed: !state.yearlyOpen,
-      }"
-      :style="{ 'max-height': `${state.yearlyOpenHeight + 20}px` }"
-    >
-      <p class="date-placeholder" v-if="orderedDates.length === 0">
-        Jeszcze nic tu nie ma. Dodaj nową datę używając przycisku na dole
-        ekranu.
-      </p>
-      <section v-if="orderedDates.length !== 0">
-        <div
-          v-for="date of orderedDates"
-          :key="date.id"
-          :class="{
-            'date-container': true,
-          }"
-          @click="openEditModal(date)"
-        >
-          <p class="date-format">{{ date.day }}.{{ date.month }}</p>
-          <p class="date-event">
-            {{ date.event }}
-          </p>
-        </div>
+  <MainLayout>
+    <section class="date">
+      <EventsModal
+        v-if="state.addModalOpen"
+        type="add"
+        @closeModal="closeModal"
+      />
+      <EventsModal
+        v-if="state.editModalOpen"
+        type="edit"
+        :data="state.editedData"
+        @closeModal="closeEditModal"
+      />
+      <PeriodicModal
+        v-if="state.addPeriodicOpen"
+        type="add"
+        @closeModal="closePeriodicModal"
+      />
+      <PeriodicModal
+        v-if="state.editPeriodicOpen"
+        type="edit"
+        :data="state.editedPeriodic"
+        @closeModal="closePeriodicEditModal"
+      />
+      <section
+        :class="{
+          'date-header': true,
+          'date-header-first': true,
+          open: state.yearlyOpen,
+        }"
+        @click="(e: Event) => toggle(e, 'yearlyOpen')"
+      >
+        <p>Coroczne</p>
       </section>
-    </div>
-    <section
-      :class="{
-        'date-header': true,
-        open: state.weeklyOpen,
-      }"
-      @click="(e: Event) => toggle(e, 'weeklyOpen')"
-    >
-      <p>Cotygodniowe</p>
-    </section>
-    <div
-      id="weeklyDrawer"
-      :class="{
-        'date-items_container': true,
-        closed: !state.weeklyOpen,
-      }"
-      :style="{ 'max-height': `${state.weeklyOpenHeight + 20}px` }"
-    >
-      <section>
-        <span class="date-weekly_button" @click="openWeeklyModal">
-          <button>+</button>
-        </span>
-        <section v-if="orderedWeekly.length !== 0">
+      <div
+        id="yearlyDrawer"
+        :class="{
+          'date-items_container': true,
+          closed: !state.yearlyOpen,
+        }"
+        :style="{ 'max-height': `${state.yearlyOpenHeight + 20}px` }"
+      >
+        <p class="date-placeholder" v-if="orderedDates.length === 0">
+          Jeszcze nic tu nie ma. Dodaj nową datę używając przycisku na dole
+          ekranu.
+        </p>
+        <section v-if="orderedDates.length !== 0">
           <div
-            v-for="weekly of orderedWeekly"
-            :key="weekly.id"
+            v-for="date of orderedDates"
+            :key="date.id"
             :class="{
               'date-container': true,
+              loading: datesDateUpdating.indexOf(date._id) !== -1,
             }"
-            @click="openWeeklyEditModal(weekly)"
+            @click="openEditModal(date)"
           >
-            <p class="date-format-name">{{ days[weekly.dayNumber] }}</p>
+            <p class="date-format">{{ date.day }}.{{ date.month }}</p>
             <p class="date-event">
-              {{ weekly.event }}
+              {{ date.event }}
             </p>
+            <div
+              v-if="
+                (datesLoading === true && datesDateUpdating.length === 0) ||
+                datesDateUpdating.indexOf(date._id) !== -1
+              "
+              class="date-loader"
+            />
+            <div v-if="isAnyDataFetching" class="date-mask" />
           </div>
         </section>
+      </div>
+      <section
+        :class="{
+          'date-header': true,
+          open: state.periodicOpen,
+        }"
+        @click="(e: Event) => toggle(e, 'periodicOpen')"
+      >
+        <p>Cotygodniowe</p>
       </section>
-    </div>
-    <section
-      :class="{
-        'date-header': true,
-        open: state.eventsOpen,
-      }"
-      @click="(e: Event) => toggle(e, 'eventsOpen')"
-    >
-      <p>Nadchodzące wydarzenia</p>
-    </section>
-    <div
-      id="eventsDrawer"
-      :class="{
-        'date-items_container': true,
-        closed: !state.eventsOpen,
-      }"
-      :style="{ 'max-height': `${state.eventsOpenHeight + 20}px` }"
-    >
-      <p class="date-placeholder" v-if="orderedOneTimeDates.length === 0">
-        Jeszcze nic tu nie ma. Dodaj nową datę używając przycisku na dole
-        ekranu.
-      </p>
-      <section v-if="orderedOneTimeDates.length !== 0">
-        <div
-          v-for="date of orderedOneTimeDates"
-          :key="date.id"
-          :class="{ 'date-container': true, grey: passed(date) === true }"
-          @click="openEditModal(date)"
-        >
-          <p class="date-format">
-            {{ date.day }}.{{ date.month }}.{{ date.year }}
-          </p>
-          <p class="date-event">
-            {{ date.event }}
-          </p>
-        </div>
+      <div
+        id="periodicDrawer"
+        :class="{
+          'date-items_container': true,
+          closed: !state.periodicOpen,
+        }"
+        :style="{ 'max-height': `${state.periodicOpenHeight + 20}px` }"
+      >
+        <section>
+          <section>
+            <section @click="openPeriodicModal">
+              <AddPeriodicButton />
+            </section>
+            <div
+              v-for="periodic of orderedPeriodic"
+              :key="periodic.id"
+              :class="{
+                'date-container': true,
+                loading: periodicDateUpdating.indexOf(periodic._id) !== -1,
+              }"
+              @click="openPeriodicEditModal(periodic)"
+            >
+              <p class="date-format-name">{{ days[periodic.dayNumber] }}</p>
+              <p class="date-event">
+                {{ periodic.event }}
+              </p>
+              <div
+                v-if="
+                  isAnyDataUpdating ||
+                  periodicDateUpdating.indexOf(periodic._id) !== -1
+                "
+                class="date-loader"
+              />
+              <div v-if="isAnyDataFetching" class="date-mask" />
+            </div>
+          </section>
+        </section>
+      </div>
+      <section
+        :class="{
+          'date-header': true,
+          open: state.eventsOpen,
+        }"
+        @click="(e: Event) => toggle(e, 'eventsOpen')"
+      >
+        <p>Nadchodzące wydarzenia</p>
       </section>
-    </div>
-    <section @click="openModal">
-      <AddButton />
+      <div
+        id="eventsDrawer"
+        :class="{
+          'date-items_container': true,
+          closed: !state.eventsOpen,
+        }"
+        :style="{ 'max-height': `${state.eventsOpenHeight + 20}px` }"
+      >
+        <p class="date-placeholder" v-if="orderedOneTimeDates.length === 0">
+          Jeszcze nic tu nie ma. Dodaj nową datę używając przycisku na dole
+          ekranu.
+        </p>
+        <section v-if="orderedOneTimeDates.length !== 0">
+          <div
+            v-for="date of orderedOneTimeDates"
+            :key="date.id"
+            :class="{
+              'date-container': true,
+              grey: passed(date) === true,
+              loading: datesDateUpdating.indexOf(date._id) !== -1,
+            }"
+            @click="openEditModal(date)"
+          >
+            <p class="date-format">
+              {{ date.day }}.{{ date.month }}.{{ date.year }}
+            </p>
+            <p class="date-event">
+              {{ date.event }}
+            </p>
+            <div
+              v-if="
+                isAnyDataUpdating || datesDateUpdating.indexOf(date._id) !== -1
+              "
+              class="date-loader"
+            />
+            <div v-if="isAnyDataFetching" class="date-mask" />
+          </div>
+        </section>
+      </div>
+      <section @click="openModal">
+        <AddButton />
+      </section>
     </section>
-  </section>
+  </MainLayout>
 </template>
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
+@import "@/styles/keyframes.scss";
 
 .date {
   display: flex;
@@ -317,6 +367,31 @@ onUpdated(() => getHeights());
   justify-content: center;
   align-items: center;
   width: 100%;
+
+  &-loader {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    height: 14px;
+    width: 14px;
+    border-radius: $full-border-radius;
+    border-top: 3px solid $border-green;
+    border-bottom: 3px solid $border-green;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    z-index: 10000;
+    animation: rotateLoader 1s linear infinite;
+  }
+
+  &-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    z-index: 1000;
+    opacity: 0.5;
+    cursor: default;
+  }
 
   &-header {
     display: flex;
@@ -344,24 +419,6 @@ onUpdated(() => getHeights());
       border-bottom-left-radius: 0;
       background-color: $pale-green;
       transition: all 0.3s;
-    }
-  }
-
-  &-weekly_button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-
-    button {
-      font-size: 26px;
-      color: $white;
-      border: none;
-      border-radius: $standard-border-radius;
-      background-color: $border-green;
-      width: calc(100% - 20px);
-      height: 30px;
-      cursor: pointer;
     }
   }
 
@@ -412,6 +469,10 @@ onUpdated(() => getHeights());
     &:hover {
       background: $pale-green;
       cursor: pointer;
+    }
+
+    &.loading {
+      z-index: -1;
     }
 
     section {
@@ -491,6 +552,10 @@ onUpdated(() => getHeights());
         background-color: $pale-green;
         transition: all 0.3s;
       }
+    }
+
+    &-loader {
+      bottom: -6px;
     }
 
     &-container {
