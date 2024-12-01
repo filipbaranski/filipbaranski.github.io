@@ -10,7 +10,7 @@ import { RouterLink } from "vue-router";
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
+@use "@/styles/global.scss" as *;
 
 .menu-desktop {
   display: none;

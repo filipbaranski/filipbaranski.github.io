@@ -171,8 +171,8 @@ const detectKey = (e: any) => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
-@import "@/styles/keyframes.scss";
+@use "@/styles/global.scss" as *;
+@use "@/styles/keyframes.scss" as *;
 
 .error {
   padding: 5px 15px;

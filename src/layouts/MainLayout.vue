@@ -18,7 +18,7 @@ import MobileMenuComponent from "@/components/MobileMenuComponent.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
+@use "@/styles/global.scss" as *;
 .header {
   height: 75px;
   width: 100%;

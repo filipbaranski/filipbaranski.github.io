@@ -7,7 +7,7 @@
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
+@use "@/styles/global.scss" as *;
 
 .innerBorder {
   box-sizing: border-box;

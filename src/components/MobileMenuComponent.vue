@@ -27,7 +27,8 @@ const closeMenu = () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
+@use "@/styles/global.scss" as *;
+
 .menu-bar {
   display: flex;
   justify-content: center;

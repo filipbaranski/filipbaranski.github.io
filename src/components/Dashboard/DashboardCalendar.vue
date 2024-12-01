@@ -59,8 +59,8 @@ const editedData = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/global.scss";
-@import "@/styles/keyframes.scss";
+@use "@/styles/global.scss" as *;
+@use "@/styles/keyframes.scss" as *;
 
 .calendar_day {
   padding: 5px;
