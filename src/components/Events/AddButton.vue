@@ -40,7 +40,7 @@ const isAnyDataFetching = computed(() => {
   outline: none;
   border: none;
   bottom: 10px;
-  right: 30px;
+  right: 10px;
   width: 45px;
   height: 45px;
   border-radius: $full-border-radius;

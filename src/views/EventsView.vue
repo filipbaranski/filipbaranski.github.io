@@ -577,6 +577,11 @@ onMounted(() => getHeights());
 
     &-format {
       width: 170px;
+
+      &-name {
+        font-size: 18px;
+        width: 170px;
+      }
     }
 
     &-event {
