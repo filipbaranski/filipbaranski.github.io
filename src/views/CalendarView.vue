@@ -54,7 +54,6 @@ const openEditModal = (day: number) => {
       red: red.indexOf(day) !== -1,
       is_cube: is_cube.indexOf(day) !== -1,
     };
-    console.log(data, calendarStore.calendar);
     state.editedData = data;
     state.editModalOpen = true;
   }
