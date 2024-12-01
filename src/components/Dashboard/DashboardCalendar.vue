@@ -6,7 +6,7 @@ import Cube from "@/assets/svg/Cube.svg";
 import CubeWhite from "@/assets/svg/CubeWhite.svg";
 
 const calendarStore = useCalendarStore();
-const { calendar } = storeToRefs(calendarStore);
+const { calendar, calendarLoading } = storeToRefs(calendarStore);
 
 const currentDate = new Date();
 
@@ -17,12 +17,13 @@ const state = reactive({
 });
 
 const editedData = computed(() => {
-  const { red, is_cube } = calendar.value;
+  const { _id, red, is_cube } = calendar.value;
   const day = state.currentDay;
   const data = {
     date: `${day >= 10 ? day : `0${day}`}.${
       state.month >= 9 ? state.month + 1 : `0${state.month + 1}`
     }.${state.year}`,
+    id: _id,
     day,
     month: state.month,
     year: state.year,
@@ -35,9 +36,12 @@ const editedData = computed(() => {
 
 <template>
   <section
+    v-if="calendar.year"
     class="calendar_day-container"
     @click="$emit('openModal', editedData)"
   >
+    <div v-if="calendarLoading" class="calendar_day-loader" />
+    <div v-if="calendarLoading" class="calendar_day-mask" />
     <div class="calendar_day">
       <div
         :class="{
@@ -56,6 +60,7 @@ const editedData = computed(() => {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
+@import "@/styles/keyframes.scss";
 
 .calendar_day {
   padding: 5px;
@@ -102,6 +107,31 @@ const editedData = computed(() => {
   p {
     width: 27px;
     font-weight: 600;
+  }
+
+  &-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    z-index: 1000;
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &-loader {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    height: 20px;
+    width: 20px;
+    border-radius: $full-border-radius;
+    border-top: 3px solid $border-green;
+    border-bottom: 3px solid $border-green;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    z-index: 10000;
+    animation: rotateLoader 1s linear infinite;
   }
 }
 

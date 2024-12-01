@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, onBeforeMount } from "vue";
+import { storeToRefs } from "pinia";
 import { useCalendarStore } from "@/stores/calendar";
+import { useAuthStore } from "@/stores/auth";
 import Cube from "@/assets/svg/Cube.svg";
 import CubeWhite from "@/assets/svg/CubeWhite.svg";
 
 const calendarStore = useCalendarStore();
+const { calendarLoading } = storeToRefs(calendarStore);
 
 const emit = defineEmits(["closeModal"]);
 
@@ -12,6 +15,7 @@ const props = defineProps(["data"]);
 
 const state = reactive({
   date: props.data.date,
+  id: props.data.id,
   day: props.data.day,
   month: props.data.month,
   year: props.data.year,
@@ -20,7 +24,7 @@ const state = reactive({
 });
 
 const update = () => {
-  const { day, month, year, red, is_cube } = state;
+  const { id, day, month, year, red, is_cube } = state;
   const payload = {
     day,
     month,
@@ -28,9 +32,21 @@ const update = () => {
     red,
     is_cube,
   };
-  calendarStore.updateCalendar({ payload });
+  calendarStore.updateCalendar({ id, payload });
   emit("closeModal");
 };
+
+onBeforeMount(() => {
+  const authStore = useAuthStore();
+  const currentDate = new Date();
+  const testString = `${currentDate.getFullYear()}-${
+    currentDate.getMonth() + 1
+  }-${currentDate.getDate()}`;
+  if (authStore.lastDay !== "" && authStore.lastDay !== testString) {
+    authStore.lastDay = testString;
+    window.location.reload();
+  }
+});
 </script>
 
 <template>
@@ -53,7 +69,7 @@ const update = () => {
         </div>
       </div>
       <footer>
-        <button @click="update">Zmień</button>
+        <button :disabled="calendarLoading" @click="update">Zmień</button>
         <button @click="$emit('closeModal')">Anuluj</button>
       </footer>
     </section>
@@ -62,17 +78,7 @@ const update = () => {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
-
-@keyframes moduleUpFadeIn {
-  0% {
-    transform: translateX(-50%) translateY(-25%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50%) translateY(-50%);
-    opacity: 1;
-  }
-}
+@import "@/styles/keyframes.scss";
 
 .modal {
   &-box {
@@ -152,7 +158,7 @@ const update = () => {
     border-radius: $standard-border-radius;
     z-index: 20;
     box-shadow: $box-shadow;
-    animation: moduleUpFadeIn 0.5s;
+    animation: modalModuleUpFadeIn 0.5s;
 
     header {
       font-size: 24px;

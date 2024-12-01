@@ -66,7 +66,7 @@ const validate = (data: any) => {
 
 const update = () => {
   const { data } = props;
-  const id = data.id;
+  const id = data._id;
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
@@ -81,7 +81,7 @@ const update = () => {
       event: sanitizedEvent,
     };
     if (state.date.year !== "") payload.year = state.date.year;
-    datesStore.updateDate({ id, ...payload });
+    datesStore.updateDate({ id, payload });
     emit("closeModal");
   } else {
     state.error = true;
@@ -112,7 +112,7 @@ const send = () => {
 
 const remove = () => {
   const { data } = props;
-  const id = data.id;
+  const id = data._id;
   datesStore.deleteDate(id);
   emit("closeModal");
 };
@@ -133,14 +133,26 @@ const detectKey = (e: any) => {
     <section class="modal-proper" @keydown="detectKey">
       <header v-if="type === 'add'">Dodaj</header>
       <header v-if="type === 'edit'">Edytuj</header>
-      <input v-model="state.date.day" placeholder="DD" spellcheck="false" />
-      <input v-model="state.date.month" placeholder="MM" spellcheck="false" />
       <input
+        name="event-day"
+        v-model="state.date.day"
+        placeholder="DD"
+        spellcheck="false"
+      />
+      <input
+        name="event-month"
+        v-model="state.date.month"
+        placeholder="MM"
+        spellcheck="false"
+      />
+      <input
+        name="event-year"
         v-model="state.date.year"
         placeholder="RRRR (opcjonalne)"
         spellcheck="false"
       />
       <input
+        name="event-event"
         v-model="state.date.event"
         placeholder="Wydarzenie"
         spellcheck="false"
@@ -160,17 +172,7 @@ const detectKey = (e: any) => {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
-
-@keyframes moduleUpFadeIn {
-  0% {
-    transform: translateX(-50%) translateY(-25%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50%) translateY(-50%);
-    opacity: 1;
-  }
-}
+@import "@/styles/keyframes.scss";
 
 .error {
   padding: 5px 15px;
@@ -217,7 +219,7 @@ const detectKey = (e: any) => {
     border-radius: $standard-border-radius;
     z-index: 20;
     box-shadow: $box-shadow;
-    animation: moduleUpFadeIn 0.5s;
+    animation: modalModuleUpFadeIn 0.5s;
 
     header {
       font-size: 24px;

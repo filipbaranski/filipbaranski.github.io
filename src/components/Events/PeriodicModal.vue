@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { useWeeklyStore } from "@/stores/weekly";
+import { usePeriodicStore } from "@/stores/periodic";
 
-const weeklyStore = useWeeklyStore();
+const periodicStore = usePeriodicStore();
 
 const props = defineProps(["type", "data"]);
 
@@ -29,7 +29,7 @@ const validate = (data: any) => {
 
 const update = () => {
   const { data } = props;
-  const id = data.id;
+  const id = data._id;
   const isValid = validate(state.date);
   if (isValid) {
     state.error = false;
@@ -38,7 +38,7 @@ const update = () => {
       dayNumber: state.date.dayNumber || "0",
       event: sanitizedEvent,
     };
-    weeklyStore.updateWeekly({ id, ...payload });
+    periodicStore.updatePeriodic({ id, payload });
     emit("closeModal");
   } else {
     state.error = true;
@@ -54,7 +54,7 @@ const send = () => {
       dayNumber: state.date.dayNumber || "0",
       event: sanitizedEvent,
     };
-    weeklyStore.postWeekly(payload);
+    periodicStore.postPeriodic(payload);
     emit("closeModal");
   } else {
     state.error = true;
@@ -63,8 +63,8 @@ const send = () => {
 
 const remove = () => {
   const { data } = props;
-  const id = data.id;
-  weeklyStore.deleteWeekly(id);
+  const id = data._id;
+  periodicStore.deletePeriodic(id);
   emit("closeModal");
 };
 
@@ -85,7 +85,7 @@ const detectKey = (e: any) => {
       <header v-if="type === 'add'">Dodaj</header>
       <header v-if="type === 'edit'">Edytuj</header>
       <div class="modal-select">
-        <select v-model="state.date.dayNumber">
+        <select name="periodic-select" v-model="state.date.dayNumber">
           <option value="0">Poniedziałek</option>
           <option value="1">Wtorek</option>
           <option value="2">Środa</option>
@@ -96,6 +96,7 @@ const detectKey = (e: any) => {
         </select>
       </div>
       <input
+        name="periodic-event"
         v-model="state.date.event"
         placeholder="Wydarzenie"
         spellcheck="false"
@@ -115,17 +116,7 @@ const detectKey = (e: any) => {
 
 <style scoped lang="scss">
 @import "@/styles/global.scss";
-
-@keyframes moduleUpFadeIn {
-  0% {
-    transform: translateX(-50%) translateY(-25%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(-50%) translateY(-50%);
-    opacity: 1;
-  }
-}
+@import "@/styles/keyframes.scss";
 
 .error {
   padding: 5px 15px;

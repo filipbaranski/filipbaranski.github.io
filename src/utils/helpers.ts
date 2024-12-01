@@ -1,3 +1,22 @@
+const clearStorage = () => {
+  localStorage.removeItem("userToken");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("dates");
+  localStorage.removeItem("calendar");
+};
+
+const getStoredUser = () => {
+  const token = localStorage.getItem("userToken") || null;
+  const id = localStorage.getItem("userId") || null;
+
+  return { token, id };
+};
+
+const setStoredUser = (userData: any) => {
+  localStorage.setItem("userToken", userData.token);
+  localStorage.setItem("userId", userData.id);
+};
+
 const getStoredCalendar = () => {
   return localStorage.getItem("calendar");
 };
@@ -14,18 +33,22 @@ const setStoredDates = (data: any) => {
   localStorage.setItem("dates", data);
 };
 
-const getStoredWeekly = () => {
-  return localStorage.getItem("weekly");
+const getStoredPeriodic = () => {
+  return localStorage.getItem("periodic");
 };
 
-const setStoredWeekly = (data: any) => {
-  localStorage.setItem("weekly", data);
+const setStoredPeriodic = (data: any) => {
+  localStorage.setItem("periodic", data);
 };
+
 export {
+  clearStorage,
+  getStoredUser,
+  setStoredUser,
   getStoredCalendar,
   setStoredCalendar,
   getStoredDates,
   setStoredDates,
-  getStoredWeekly,
-  setStoredWeekly,
+  getStoredPeriodic,
+  setStoredPeriodic,
 };
