@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, onUpdated, onMounted } from "vue";
+import { computed, reactive, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useDatesStore } from "@/stores/dates";
 import { usePeriodicStore } from "@/stores/periodic";
@@ -178,8 +178,11 @@ const getHeights = () => {
   state.periodicOpenHeight = weeklyHeight;
 };
 
+watch(isAnyDataFetching, () => {
+  getHeights();
+});
+
 onMounted(() => getHeights());
-onUpdated(() => getHeights());
 </script>
 
 <template>
