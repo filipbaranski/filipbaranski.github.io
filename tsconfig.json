@@ -7,15 +7,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": [
-      "vite-plugin-pwa/client",
-      "vite/client"
-    ]
-  },
-
-  "references": [
-    {
-      "path": "./tsconfig.config.json"
-    }
-  ]
+    "types": ["vite-plugin-pwa/client", "vite/client"]
+  }
 }
