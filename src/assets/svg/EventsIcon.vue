@@ -50,7 +50,7 @@
 
 <style scoped lang="scss">
 svg {
-  width: 20px;
+  width: 15px;
   fill: #99cc33;
 }
 </style>
