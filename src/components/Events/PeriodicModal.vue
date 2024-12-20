@@ -178,7 +178,7 @@ const detectKey = (e: any) => {
     border-radius: $standard-border-radius;
     z-index: 20;
     box-shadow: $box-shadow;
-    animation: moduleUpFadeIn 0.5s;
+    animation: modalModuleUpFadeIn 0.5s;
 
     header {
       font-size: 24px;

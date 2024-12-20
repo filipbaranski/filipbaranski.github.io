@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import DesktopMenuComponent from "@/components/DesktopMenuComponent.vue";
-import MobileMenuComponent from "@/components/MobileMenuComponent.vue";
+import DesktopMenuComponent from "@/components/MenuComponent.vue";
 </script>
 
 <template>
@@ -11,7 +10,6 @@ import MobileMenuComponent from "@/components/MobileMenuComponent.vue";
     </RouterLink>
   </header>
   <DesktopMenuComponent />
-  <MobileMenuComponent />
   <section class="innerBorder">
     <slot />
   </section>
