@@ -28,20 +28,10 @@ import EventsIcon from "@/assets/svg/EventsIcon.vue";
   display: block;
 }
 
-@media only screen and (min-width: 768px) {
-  .desktop {
-    display: block;
-  }
-
-  .mobile {
-    display: none;
-  }
-}
-
 .menu {
   display: flex;
   justify-content: space-between;
-  height: 55px;
+  height: 40px;
   background-color: $white;
 }
 
@@ -51,7 +41,7 @@ a {
   justify-content: center;
   align-items: center;
   max-height: 75px;
-  border-bottom: 3px solid $button-shadow;
+  border-bottom: 2px solid $button-shadow;
   color: $black;
   line-height: 35px;
   font-size: 18px;
@@ -60,15 +50,28 @@ a {
   background-color: $white;
 
   &:hover {
-    border-bottom: 3px solid $border-green;
+    border-bottom: 2px solid $border-green;
   }
 
   &.router-link-active {
-    border-bottom: 3px solid $border-green;
+    border-bottom: 2px solid $border-green;
     background-color: $white;
     border-left: none;
     text-shadow: none;
     color: $black;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+  .menu {
+    height: 55px;
   }
 }
 </style>
