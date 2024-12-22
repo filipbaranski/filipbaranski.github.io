@@ -54,8 +54,8 @@ a {
   }
 
   &.router-link-active {
-    border-bottom: 2px solid $border-green;
-    background-color: $white;
+    border-bottom: 3px solid $border-green;
+    background-color: $palest-green;
     border-left: none;
     text-shadow: none;
     color: $black;
