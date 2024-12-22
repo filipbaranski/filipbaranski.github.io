@@ -64,9 +64,10 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
+  height: calc(100vh - 165px);
 
   &-background {
-    height: calc(100vh - 155px);
+    height: calc(100vh - 165px);
     opacity: 0.4;
     background-image: url("../assets/icon.png");
     background-repeat: no-repeat;
@@ -95,6 +96,8 @@ onMounted(() => {
 
 @media only screen and (min-width: 768px) {
   .dashboard {
+    height: calc(100vh - 190px);
+
     &-background {
       height: calc(100vh - 190px);
     }
