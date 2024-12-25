@@ -31,7 +31,7 @@ import EventsIcon from "@/assets/svg/EventsIcon.vue";
 .menu {
   display: flex;
   justify-content: space-between;
-  height: 50px;
+  height: 45px;
   background-color: $white;
 }
 
