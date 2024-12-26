@@ -88,7 +88,7 @@ const eventFilter = (daysLeft: any) => {
     justify-content: right;
     padding-right: 15px;
     margin-right: 15px;
-    width: 80px;
+    width: 70px;
     font-weight: bold;
     border-right: 2px solid $border-green;
   }
