@@ -88,7 +88,7 @@ const eventFilter = (daysLeft: any) => {
     justify-content: right;
     padding-right: 15px;
     margin-right: 15px;
-    width: 50px;
+    width: 80px;
     font-weight: bold;
     border-right: 2px solid $border-green;
   }
@@ -131,10 +131,6 @@ const eventFilter = (daysLeft: any) => {
 @media only screen and (min-width: 768px) {
   .periodic {
     font-size: 18px;
-
-    &-heading {
-      width: 70px;
-    }
 
     &-container {
       width: 600px;
