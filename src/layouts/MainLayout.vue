@@ -20,7 +20,7 @@ import DesktopMenuComponent from "@/components/MenuComponent.vue";
 .header {
   height: 75px;
   width: 100%;
-  background-image: url(@/assets/bar360.png);
+  background-image: url(@/assets/bar360_mobile.png);
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -48,6 +48,10 @@ a {
 }
 
 @media only screen and (min-width: 768px) {
+  .header {
+    background-image: url(@/assets/bar360_desktop.png);
+  }
+
   .innerBorder {
     padding: 35px 100px 25px;
   }

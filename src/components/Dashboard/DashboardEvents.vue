@@ -5,11 +5,8 @@ import { useDatesStore } from "@/stores/dates";
 import { usePeriodicStore } from "@/stores/periodic";
 
 const datesStore = useDatesStore();
-const periodicStore = usePeriodicStore();
 
 const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
-const { periodic, periodicDateUpdating, periodicLoading } =
-  storeToRefs(periodicStore);
 
 const daysInAdvance = 7;
 
@@ -46,18 +43,6 @@ const upcomingEvents = computed(() => {
       displayedEvents.push({ ...date, daysLeft });
     }
   });
-  periodic.value.forEach((item) => {
-    let dayNumber = parseInt(item.dayNumber) + 1;
-    if (dayNumber === 7) dayNumber = 0;
-    let daysLeft;
-    if (currentDay <= dayNumber) daysLeft = dayNumber - currentDay;
-    if (currentDay > dayNumber) daysLeft = 7 - currentDay + dayNumber;
-    displayedEvents.push({ ...item, daysLeft });
-    if (currentDay === dayNumber) {
-      daysLeft = 7;
-      displayedEvents.push({ ...item, daysLeft });
-    }
-  });
   return displayedEvents;
 });
 
@@ -74,12 +59,7 @@ const eventFilter = (daysLeft: any) => {
   <section class="dates-container">
     <div v-if="upcomingEvents.length !== 0" class="dates">
       <div
-        v-if="
-          datesLoading === true ||
-          periodicLoading === true ||
-          datesDateUpdating.length !== 0 ||
-          periodicDateUpdating.length !== 0
-        "
+        v-if="datesLoading === true || datesDateUpdating.length !== 0"
         class="dates-loader"
       />
       <section v-for="n in daysInAdvance + 1" :key="n">
@@ -98,12 +78,7 @@ const eventFilter = (daysLeft: any) => {
     </div>
     <div v-if="upcomingEvents.length === 0" class="dates">
       <div
-        v-if="
-          datesLoading === true ||
-          periodicLoading === true ||
-          datesDateUpdating.length !== 0 ||
-          periodicDateUpdating.length !== 0
-        "
+        v-if="datesLoading === true || datesDateUpdating.length !== 0"
         class="dates-loader"
       />
       <div class="dates-block">
@@ -120,7 +95,7 @@ const eventFilter = (daysLeft: any) => {
 @use "@/styles/keyframes.scss" as *;
 
 .dates {
-  max-height: 50vh;
+  max-height: calc(100vh - 360px);
   overflow-y: scroll;
   padding: 15px 5px 0;
   border: 2px solid $border-green;

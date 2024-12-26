@@ -5,6 +5,7 @@ import { useCalendarStore } from "@/stores/calendar";
 import MainLayout from "@/layouts/MainLayout.vue";
 import CalendarModal from "@/components/CalendarModal.vue";
 import DashboardCalendar from "@/components/Dashboard/DashboardCalendar.vue";
+import DashboardPeriodic from "@/components/Dashboard/DashboardPeriodic.vue";
 import DashboardEvents from "@/components/Dashboard/DashboardEvents.vue";
 
 const calendarStore = useCalendarStore();
@@ -51,6 +52,7 @@ onMounted(() => {
       />
       <section class="dashboard-layout dashboard-bottom_container">
         <DashboardCalendar @openModal="openEditModal" />
+        <DashboardPeriodic />
         <DashboardEvents />
       </section>
       <div class="dashboard-background" />

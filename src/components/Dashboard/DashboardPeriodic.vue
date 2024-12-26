@@ -1,51 +1,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useDatesStore } from "@/stores/dates";
 import { usePeriodicStore } from "@/stores/periodic";
 
-const datesStore = useDatesStore();
 const periodicStore = usePeriodicStore();
 
-const { dates, datesDateUpdating, datesLoading } = storeToRefs(datesStore);
 const { periodic, periodicDateUpdating, periodicLoading } =
   storeToRefs(periodicStore);
 
-const daysInAdvance = 7;
-
 const upcomingEvents = computed(() => {
   const displayedEvents: any = [];
-  const msInDay = 24 * 60 * 60 * 1000;
-  const timeInAdvance = daysInAdvance * msInDay;
   const today = new Date();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
-  const currentDate = new Date(currentYear, currentMonth, today.getDate());
   const currentDay = today.getDay();
-  const currentTime = currentDate.getTime();
-  dates.value.forEach((date: any) => {
-    const eventDay = parseInt(date.day, 10);
-    const eventMonth = parseInt(date.month, 10) - 1;
-    let eventYear = currentYear;
-    if (date.year) eventYear = parseInt(date.year, 10);
-    if (eventMonth < currentMonth && eventYear - currentYear === 1) {
-      eventYear = currentYear + 1;
-    }
-    const eventDate = new Date(eventYear, eventMonth, eventDay);
-    const eventTime = eventDate.getTime();
-    const timesDifference = eventTime - currentTime;
-    const timeOffsetDiff =
-      eventDate.getTimezoneOffset() - currentDate.getTimezoneOffset();
-    const timeOffsetDiffMs = timeOffsetDiff * 60 * 1000;
-    const finalTimesDifference = timesDifference - timeOffsetDiffMs;
-    if (
-      finalTimesDifference <= timeInAdvance &&
-      finalTimesDifference > -1 * msInDay
-    ) {
-      const daysLeft = Math.round(finalTimesDifference / msInDay);
-      displayedEvents.push({ ...date, daysLeft });
-    }
-  });
   periodic.value.forEach((item) => {
     let dayNumber = parseInt(item.dayNumber) + 1;
     if (dayNumber === 7) dayNumber = 0;
@@ -71,45 +37,26 @@ const eventFilter = (daysLeft: any) => {
 </script>
 
 <template>
-  <section class="dates-container">
-    <div v-if="upcomingEvents.length !== 0" class="dates">
+  <section class="periodic-container">
+    <div v-if="upcomingEvents.length !== 0" class="periodic">
       <div
-        v-if="
-          datesLoading === true ||
-          periodicLoading === true ||
-          datesDateUpdating.length !== 0 ||
-          periodicDateUpdating.length !== 0
-        "
-        class="dates-loader"
+        v-if="periodicLoading === true || periodicDateUpdating.length !== 0"
+        class="periodic-loader"
       />
-      <section v-for="n in daysInAdvance + 1" :key="n">
-        <div v-if="eventFilter(n - 1).length !== 0" class="dates-block">
-          <p v-if="n - 1 === 0" class="dates-heading">Dzisiaj</p>
-          <p v-if="n - 1 === 1" class="dates-heading">Jutro</p>
-          <p v-if="n - 1 > 1 && n - 1 !== 7" class="dates-heading">
-            {{ `Za ${n - 1} dni` }}
+      <div v-for="index in 2" class="periodic-block" :key="index">
+        <p class="periodic-heading">{{ index === 1 ? "Dzisiaj" : "Jutro" }}</p>
+        <section class="periodic-date-block">
+          <p v-if="eventFilter(index - 1).length === 0" class="periodic-date">
+            ---
           </p>
-          <p v-if="n - 1 === 7" class="dates-heading">Za tydzień</p>
-          <span v-for="event in eventFilter(n - 1)" :key="event.id">
-            <p class="dates-date">{{ event.event }}</p>
-          </span>
-        </div>
-      </section>
-    </div>
-    <div v-if="upcomingEvents.length === 0" class="dates">
-      <div
-        v-if="
-          datesLoading === true ||
-          periodicLoading === true ||
-          datesDateUpdating.length !== 0 ||
-          periodicDateUpdating.length !== 0
-        "
-        class="dates-loader"
-      />
-      <div class="dates-block">
-        <p class="dates-placeholder">
-          Brak nadchodzących wydarzeń w najbliższych siedmiu dniach
-        </p>
+          <p
+            v-for="event in eventFilter(index - 1)"
+            :key="event.id"
+            class="periodic-date"
+          >
+            {{ event.event }}
+          </p>
+        </section>
       </div>
     </div>
   </section>
@@ -119,11 +66,10 @@ const eventFilter = (daysLeft: any) => {
 @use "@/styles/global.scss" as *;
 @use "@/styles/keyframes.scss" as *;
 
-.dates {
-  max-height: 50vh;
-  overflow-y: scroll;
+.periodic {
   padding: 15px 5px 0;
-  border: 2px solid $border-green;
+  border: 2px solid $pale-green;
+  background-color: $palest-green;
   border-radius: $standard-border-radius;
   font-size: 14px;
 
@@ -138,27 +84,28 @@ const eventFilter = (daysLeft: any) => {
   }
 
   &-heading {
-    width: fit-content;
-    margin: 0 auto 5px;
-    padding: 2px 6px;
+    display: flex;
+    justify-content: right;
+    padding-right: 15px;
+    margin-right: 15px;
+    width: 50px;
     font-weight: bold;
-    border-bottom: 2px solid $border-green;
+    border-right: 2px solid $border-green;
   }
 
   &-date {
     line-height: 18px;
+
+    &-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   &-block {
+    display: flex;
     margin-bottom: 15px;
-  }
-
-  &-placeholder {
-    padding: 0 30px;
-    color: $grey;
-    text-align: center;
-    font-style: italic;
-    letter-spacing: 0.5px;
   }
 
   &::-webkit-scrollbar {
@@ -182,8 +129,12 @@ const eventFilter = (daysLeft: any) => {
 }
 
 @media only screen and (min-width: 768px) {
-  .dates {
+  .periodic {
     font-size: 18px;
+
+    &-heading {
+      width: 70px;
+    }
 
     &-container {
       width: 600px;

@@ -5,9 +5,7 @@ import { RouterLink } from "vue-router";
 <template>
   <section class="error">
     <p class="errorText">404</p>
-    <RouterLink to="/calendar" class="errorLink"
-      >Wróć na stronę główną</RouterLink
-    >
+    <RouterLink to="/" class="errorLink">Wróć na stronę główną</RouterLink>
   </section>
 </template>
 
@@ -31,7 +29,7 @@ import { RouterLink } from "vue-router";
   font-weight: 800;
   -webkit-background-clip: text;
   background-clip: text;
-  background-image: url("@/assets/bar360.png");
+  background-image: url(@/assets/bar360_mobile.png);
   color: transparent;
 }
 
@@ -39,5 +37,11 @@ import { RouterLink } from "vue-router";
   text-decoration: none;
   color: $black;
   font-weight: 800;
+}
+
+@media only screen and (min-width: 768px) {
+  .errorText {
+    background-image: url(@/assets/bar360_desktop.png);
+  }
 }
 </style>
