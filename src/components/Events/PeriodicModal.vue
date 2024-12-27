@@ -100,6 +100,7 @@ const detectKey = (e: any) => {
         v-model="state.date.event"
         placeholder="Wydarzenie"
         spellcheck="false"
+        autocomplete="off"
       />
       <p :class="{ error: true, open: state.error }">
         {{ state.error_msg }}

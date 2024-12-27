@@ -138,24 +138,28 @@ const detectKey = (e: any) => {
         v-model="state.date.day"
         placeholder="DD"
         spellcheck="false"
+        autocomplete="off"
       />
       <input
         name="event-month"
         v-model="state.date.month"
         placeholder="MM"
         spellcheck="false"
+        autocomplete="off"
       />
       <input
         name="event-year"
         v-model="state.date.year"
         placeholder="RRRR (opcjonalne)"
         spellcheck="false"
+        autocomplete="off"
       />
       <input
         name="event-event"
         v-model="state.date.event"
         placeholder="Wydarzenie"
         spellcheck="false"
+        autocomplete="off"
       />
       <p :class="{ error: true, open: state.error }">
         {{ state.error_msg }}
