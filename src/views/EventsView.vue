@@ -394,7 +394,7 @@ onMounted(() => getHeights());
     z-index: 1000;
     opacity: 0.5;
     cursor: default;
-    border-radius: $standard-border-radius;
+    border-radius: 4px;
   }
 
   &-header {
