@@ -74,9 +74,10 @@ onMounted(() => {
   background-size: 256px;
 
   &-bottom_container {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
+    position: fixed;
+    width: calc(100% - 40px);
+    bottom: 20px;
+    left: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
