@@ -55,7 +55,7 @@ onMounted(() => {
         <DashboardPeriodic />
         <DashboardEvents />
       </section>
-      <div class="dashboard-background" />
+      <!-- <div class="dashboard-background" /> -->
     </div>
   </MainLayout>
 </template>
@@ -66,12 +66,16 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
-  height: calc(100vh - 260px);
-  // max-height: calc(100vh - 160px);
+  height: calc(100vh - 160px);
+  background-color: rgba(255, 255, 255, 0.6);
+  background-blend-mode: lighten;
+  background-image: url("../assets/icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 256px;
 
   &-background {
-    height: calc(100vh - 260px);
-    // max-height: calc(100vh - 160px);
+    height: calc(100vh - 160px);
     opacity: 0.4;
     background-image: url("../assets/icon.png");
     background-repeat: no-repeat;
