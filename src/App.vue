@@ -39,8 +39,6 @@ onMounted(() => {
 <style lang="scss">
 .main {
   min-height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
 }
 
 body::-webkit-scrollbar {

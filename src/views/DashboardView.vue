@@ -66,7 +66,7 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
-  height: calc(100vh - 160px);
+  height: 100%;
 
   &-background {
     height: calc(100vh - 160px);
