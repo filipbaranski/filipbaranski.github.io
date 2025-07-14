@@ -67,6 +67,7 @@ onMounted(() => {
 .dashboard {
   position: relative;
   height: calc(100vh - 160px);
+  max-height: calc(100vh - 160px);
 
   &-background {
     height: calc(100vh - 160px);
@@ -91,8 +92,8 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    // animation: dashboardModuleUpFadeIn 1s;
-    // animation-delay: -0.1s;
+    animation: dashboardModuleUpFadeIn 1s;
+    animation-delay: -0.1s;
   }
 }
 
