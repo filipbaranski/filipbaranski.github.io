@@ -65,7 +65,7 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
-  height: 200px;
+  height: 500px;
   background-color: rgba(255, 255, 255, 0.6);
   background-blend-mode: lighten;
   background-image: url("../assets/icon.png");
@@ -75,9 +75,9 @@ onMounted(() => {
 
   &-bottom_container {
     position: fixed;
-    width: calc(100% - 40px);
+    width: calc(100% - 20px);
     bottom: 20px;
-    left: 20px;
+    left: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
