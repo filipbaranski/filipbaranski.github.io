@@ -66,11 +66,11 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
-  height: 100%;
+  height: calc(100vh - 260px);
   // max-height: calc(100vh - 160px);
 
   &-background {
-    height: 100%;
+    height: calc(100vh - 260px);
     // max-height: calc(100vh - 160px);
     opacity: 0.4;
     background-image: url("../assets/icon.png");
