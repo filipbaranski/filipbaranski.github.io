@@ -39,7 +39,6 @@ onMounted(() => {
 <style lang="scss">
 .main {
   min-height: 100vh;
-  max-height: 100vh;
 }
 
 body::-webkit-scrollbar {
@@ -48,7 +47,6 @@ body::-webkit-scrollbar {
 
 #app {
   min-height: 100vh;
-  max-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
