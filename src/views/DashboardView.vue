@@ -91,8 +91,8 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    animation: dashboardModuleUpFadeIn 1s;
-    animation-delay: -0.1s;
+    // animation: dashboardModuleUpFadeIn 1s;
+    // animation-delay: -0.1s;
   }
 }
 
