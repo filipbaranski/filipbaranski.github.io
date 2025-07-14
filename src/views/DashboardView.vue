@@ -55,7 +55,6 @@ onMounted(() => {
         <DashboardPeriodic />
         <DashboardEvents />
       </section>
-      <!-- <div class="dashboard-background" /> -->
     </div>
   </MainLayout>
 </template>
@@ -73,15 +72,6 @@ onMounted(() => {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 256px;
-
-  &-background {
-    height: calc(100vh - 160px);
-    opacity: 0.4;
-    background-image: url("../assets/icon.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 256px;
-  }
 
   &-layout {
     position: absolute;
