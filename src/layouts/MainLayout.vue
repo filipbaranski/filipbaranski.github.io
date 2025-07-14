@@ -4,15 +4,15 @@ import DesktopMenuComponent from "@/components/MenuComponent.vue";
 </script>
 
 <template>
-  <!-- <header class="header">
+  <header class="header">
     <RouterLink to="/">
       <p class="banner">Tea Hub</p>
     </RouterLink>
   </header>
-  <DesktopMenuComponent /> -->
-  <section class="innerBorder">
+  <DesktopMenuComponent />
+  <!-- <section class="innerBorder">
     <slot />
-  </section>
+  </section> -->
 </template>
 
 <style scoped lang="scss">
