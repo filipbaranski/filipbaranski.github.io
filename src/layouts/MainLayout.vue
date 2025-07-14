@@ -10,9 +10,9 @@ import DesktopMenuComponent from "@/components/MenuComponent.vue";
     </RouterLink>
   </header>
   <DesktopMenuComponent />
-  <!-- <section class="innerBorder">
+  <section class="innerBorder">
     <slot />
-  </section> -->
+  </section>
 </template>
 
 <style scoped lang="scss">
