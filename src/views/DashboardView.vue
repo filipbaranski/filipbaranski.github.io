@@ -50,7 +50,7 @@ onMounted(() => {
         :data="state.editedData"
         @closeModal="closeEditModal"
       />
-      <section class="dashboard-layout dashboard-bottom_container">
+      <section class="dashboard-bottom_container">
         <DashboardCalendar @openModal="openEditModal" />
         <DashboardPeriodic />
         <DashboardEvents />
@@ -73,12 +73,6 @@ onMounted(() => {
   background-position: center;
   background-size: 256px;
 
-  &-layout {
-    position: absolute;
-    text-align: center;
-    z-index: 100;
-  }
-
   &-bottom_container {
     position: absolute;
     width: 100%;
@@ -87,6 +81,8 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    text-align: center;
+    z-index: 100;
     animation: dashboardModuleUpFadeIn 1s;
     animation-delay: -0.1s;
   }
@@ -95,10 +91,6 @@ onMounted(() => {
 @media only screen and (min-width: 768px) {
   .dashboard {
     height: calc(100vh - 190px);
-
-    &-background {
-      height: calc(100vh - 190px);
-    }
   }
 }
 </style>
