@@ -65,7 +65,7 @@ onMounted(() => {
 
 .dashboard {
   position: relative;
-  height: 500px;
+  height: 100dvh;
   background-color: rgba(255, 255, 255, 0.6);
   background-blend-mode: lighten;
   background-image: url("../assets/icon.png");
