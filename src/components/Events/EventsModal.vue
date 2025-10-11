@@ -20,6 +20,7 @@ const state = reactive({
   },
   error: false,
   error_msg: "",
+  isDialogOpen: false,
 });
 
 const listOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -117,6 +118,14 @@ const remove = () => {
   emit("closeModal");
 };
 
+const openDialog = () => {
+  state.isDialogOpen = true;
+};
+
+const closeDialog = () => {
+  state.isDialogOpen = false;
+};
+
 const detectKey = (e: any) => {
   if (e.keyCode === 13 && props.type === "add") {
     send();
@@ -129,6 +138,17 @@ const detectKey = (e: any) => {
 
 <template>
   <section class="modal-box">
+    <section class="modal-box dialog-box" v-if="state.isDialogOpen">
+      <div class="modal-mask" @click="closeDialog" />
+      <dialog class="modal-proper dialog" :open="state.isDialogOpen">
+        <p class="dialog-header">Na pewno chcesz usunąć to wydarzenie?</p>
+        <p class="dialog-name">{{ props.data.event }}</p>
+        <section class="dialog-buttons">
+          <button @click="remove">Tak</button>
+          <button @click="closeDialog">Nie</button>
+        </section>
+      </dialog>
+    </section>
     <div class="modal-mask" @click="$emit('closeModal')" />
     <section class="modal-proper" @keydown="detectKey">
       <header v-if="type === 'add'">Dodaj</header>
@@ -168,7 +188,7 @@ const detectKey = (e: any) => {
         <button v-if="type === 'add'" @click="send">Stwórz</button>
         <button v-if="type === 'edit'" @click="update">Zmień</button>
         <button @click="$emit('closeModal')">Anuluj</button>
-        <button v-if="type === 'edit'" @click="remove">Usuń</button>
+        <button v-if="type === 'edit'" @click="openDialog">Usuń</button>
       </footer>
     </section>
   </section>
@@ -192,6 +212,58 @@ const detectKey = (e: any) => {
     max-height: 200px;
     opacity: 1;
     transition: all 0.25s;
+  }
+}
+
+.dialog {
+  border: none;
+  z-index: 100 !important;
+
+  &-box {
+    z-index: 100 !important;
+  }
+
+  &-header {
+    font-size: 22px;
+    text-align: center;
+    margin: 0 auto 24px;
+    width: fit-content;
+  }
+
+  &-name {
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    margin: auto;
+    width: fit-content;
+  }
+
+  &-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 36px;
+
+    button {
+      border: none;
+      outline: none;
+      width: 35%;
+      padding: 8px;
+      border-radius: $standard-border-radius;
+      color: white;
+
+      &:hover {
+        opacity: 0.5;
+        cursor: pointer;
+      }
+
+      &:first-child {
+        background-color: $red;
+      }
+
+      &:last-child {
+        background-color: $grey;
+      }
+    }
   }
 }
 
